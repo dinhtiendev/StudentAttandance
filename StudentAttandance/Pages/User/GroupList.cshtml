@@ -1,0 +1,121 @@
+﻿@page "/grouplist"
+@model StudentAttandance.Pages.User.GroupListModel
+@{
+}
+<div class="row bg-light p-3">
+    <div class="col-md-4 d-flex justify-content-start">
+        <h6><a class="text-decoration-none" href="">Home</a><span> | Groups</span></h6>
+    </div>
+    <div class="col-md-8 d-flex justify-content-end">
+        <a class="text-decoration-none" href="#">
+            <span class="private-information text-light p-1 rounded-2">datnthe153704</span>
+        </a> &nbsp;|&nbsp;
+        <a class="text-decoration-none" href="#">
+            <span class="private-information text-light p-1 rounded-2">logout</span>
+        </a> &nbsp;|&nbsp;
+        <a class="text-decoration-none">
+            <span class="private-information text-light p-1 rounded-2">
+                CAMPUS:
+                FPTU-Hòa Lạc
+            </span>
+        </a>
+    </div>
+</div>
+<p style="font-size: 25px;" class="p-3 my-3 text-muted fw-bold">Select a course, then a group ...</p>
+<div class="my-3">
+    <table class="table table-bordered">
+        <thead style="background-color: #6b90da;">
+            <tr>
+                <th class="fw-normal">CAMPUS/PROGRAM</th>
+                <th class="fw-normal">TERM</th>
+                <th class="fw-normal">COURSE</th>
+                <th class="fw-normal">GROUP</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <table class="first-table table">
+                        <tbody>
+                            <tr>
+                                <td><b>FU-HL</b></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+                <td>
+                    <table class="second-table table">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <a class="text-decoration-none" href="">
+                                        Summer2017
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+                <td>
+                    <table class="third-table table">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <a class="text-decoration-none" href="">
+                                        OOP with Java
+                                        Lab(LAB211)
+                                    </a><span>
+                                        (SE1606,start
+                                        06/09/2021)
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+                <td>
+                    <table class="four-table table">
+                        <tbody>
+                            <tr>
+                                <td><a class="text-decoration-none" href="">SE1601</a></td>
+                            </tr>
+                            <tr>
+                                <td><a class="text-decoration-none" href="">SE1602</a></td>
+                            </tr>
+                            <tr>
+                                <td><a class="text-decoration-none" href="">SE1603</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<p style="font-size: 25px;" class="p-3 my-3 text-muted fw-bold">... then see student list</p>
+<div class="my-3">
+    <table class="table table-bordered">
+        <thead style="background-color: #6b90da;">
+            <tr class="align-middle">
+                <th class="fw-normal">INDEX</th>
+                <th class="fw-normal">IMAGE</th>
+                <th class="fw-normal">CODE</th>
+                <th class="fw-normal">FULL NAME</th>
+                <th class="fw-normal">GIVEN NAME</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td class="fw-normal text-center">
+                    <img src="images/logo/Logo_Đại_học_FPT.png" alt="Image" width="100px"
+                         height="120px" style="border: 1px solid black;">
+                </td>
+                <td>HE153704</td>
+                <td>Nguyen Tien Dat</td>
+                <td>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
