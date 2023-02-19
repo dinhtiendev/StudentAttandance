@@ -11,7 +11,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Pages\Lecturer\" />
+    <Folder Include="Templates\" />
+    <Folder Include="Pages\Teacher\" />
     <Folder Include="Pages\Student\" />
   </ItemGroup>
 
