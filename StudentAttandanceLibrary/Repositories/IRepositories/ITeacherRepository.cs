@@ -1,6 +1,6 @@
 ﻿using StudentAttandanceLibrary.Repositories.ModelDtos;
 
-namespace TeacherAttandanceLibrary.Repositories.IRepositories
+namespace StudentAttandanceLibrary.Repositories.IRepositories
 {
     public interface ITeacherRepository
     {

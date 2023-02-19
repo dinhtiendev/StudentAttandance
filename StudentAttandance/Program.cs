@@ -1,12 +1,43 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using StudentAttandanceLibrary.Repositories.Implements;
+using StudentAttandanceLibrary.Repositories.IRepositories;
+using System.Security.Claims;
+using System.Text;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages(options =>
 {
-    options.Conventions.AddPageRoute("/Login", "/");
-    options.Conventions.AddPageRoute("/User/Home", "/Home");
-    options.Conventions.AddPageRoute("/User/Profile", "/Profile");
+    options.Conventions.AddPageRoute("/Public/Login", "/");
 });
+builder.Services.AddTransient<ILogRepository, LogRepository>();
+builder.Services.AddTransient<IAdminRepository, AdminRepository>();
+builder.Services.AddTransient<IAttandanceRepository, AttandanceRepository>();
+builder.Services.AddTransient<ICourseRepository, CourseRepository>();
+builder.Services.AddTransient<IMailRepository, MailRepository>();
+builder.Services.AddTransient<IStudentRepository, StudentRepository>();
+builder.Services.AddTransient<ITeacherRepository, TeacherRepository>();
+builder.Services.AddTransient<ITermRepository, TermRepository>();
+
+builder.Services.AddSession();
+//builder.Services.AddAuthentication(options =>
+//    {
+//        options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+//        options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+//        options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+//    })
+//    .AddCookie(options =>
+//    {
+//        options.LoginPath = "/Login";
+//    });
+//builder.Services.AddAuthorization(options =>
+// {
+//     options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("1"));
+// });
+
 
 var app = builder.Build();
 
@@ -21,8 +52,9 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseSession();
 app.UseAuthorization();
+app.UseAuthentication();
 
 app.MapRazorPages();
 

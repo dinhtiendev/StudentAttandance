@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TeacherAttandanceLibrary.Repositories.IRepositories;
+using StudentAttandanceLibrary.Repositories.IRepositories;
 
 namespace StudentAttandanceLibrary.Repositories.Implements
 {
-    internal class TeacherRepository : ITeacherRepository
+    public class TeacherRepository : ITeacherRepository
     {
         public void AddTeacher(TeacherDto teacher)
         {

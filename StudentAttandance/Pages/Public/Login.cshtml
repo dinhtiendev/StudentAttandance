@@ -1,0 +1,42 @@
+﻿@page "/login"
+@model StudentAttandance.Pages.LoginModel
+@{
+}
+<div class="border border-light border-3 rounded-3 mx-auto" style="width: 50%; margin: 2% 0; padding: 2%;">
+    <h1 class="text-center" style="padding: 0 0 3% 0;">Login</h1>
+    
+        @if (ViewData["Message"] != null)
+        {
+            <div id="alert" class="alert alert-danger" role="alert">
+                @ViewData["Message"]
+            </div>
+        }
+    
+    <form method="post">
+        <div class="form-outline mb-4">
+            <label for="Email"></label>
+            <input type="Email" name="Email" class="form-control form-control-lg"
+                   placeholder="Enter Email" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+        <div class="form-outline mb-3">
+            <input type="Password" name="Password" class="form-control form-control-lg"
+                   placeholder="Enter Password" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center">
+            @*<div class="form-check mb-0">
+                <input class="form-check-input me-2" type="checkbox" value="" id="form2Example3" />
+                <label class="form-check-label" for="form2Example3">
+                Remember me
+                </label>
+                </div>*@
+            <a asp-page="forgetPassword" class="text-decoration-none">Forgot password?</a>
+        </div>
+        <div class="text-center text-lg-start mt-4 pt-2">
+            <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;">Login</button>
+        </div>
+    </form>
+</div>
