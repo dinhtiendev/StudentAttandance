@@ -1,0 +1,132 @@
+﻿@page "/studentManagement"
+@model StudentAttandance.Pages.Admin.StudentManagementModel
+@{
+}
+<div class="row bg-light p-3">
+    <div class="col-md-4 d-flex justify-content-start">
+        <h6><a class="text-decoration-none" href="">Home</a><span> | Student List</span></h6>
+    </div>
+    <div class="col-md-8 d-flex justify-content-end">
+        <a class="text-decoration-none" href="#">
+            <span class="private-information text-light p-1 rounded-2">datnthe153704</span>
+        </a> &nbsp;|&nbsp;
+        <a class="text-decoration-none" href="#">
+            <span class="private-information text-light p-1 rounded-2">logout</span>
+        </a> &nbsp;|&nbsp;
+        <a class="text-decoration-none">
+            <span class="private-information text-light p-1 rounded-2">
+                CAMPUS:
+                FPTU-Hòa Lạc
+            </span>
+        </a>
+    </div>
+</div>
+<div class="row my-3">
+    <div class="row">
+        <div class="col-md-9">
+            <h4>Total Students: 100</h4>
+        </div>
+        <div class="col-md-3">
+            <div class="mb-3">
+                <form action="">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <input class="form-control" type="file" id="formFile">
+                        </div>
+                        <div class="col-md-4">
+                            <input class="btn btn-success" type="submit" value="Add">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <table class="table table-bordered">
+        <thead style="background-color: #6b90da;">
+            <tr class="align-middle">
+                <th class="fw-normal ">NO</th>
+                <th class="fw-normal">ROLLNUMBER</th>
+                <th class="fw-normal">FULLNAME</th>
+                <th class="fw-normal">EMAIL</th>
+                <th class="fw-normal">IMAGE</th>
+                <th class="fw-normal">DATE OF BIRTH</th>
+                <th class="fw-normal">GENDER</th>
+                <th class="fw-normal">ACTION</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>HE153704</td>
+                <td>Nguyen Tien Dat</td>
+                <td>datnthe153704@fpt.edu.vn</td>
+                <td>
+                    <p class="text-center">
+                        <img src="/FAP/images/logo/Logo_Đại_học_FPT.png" alt="" width="100px" height="100px"
+                             style="border: 1px solid black;">
+                    </p>
+                </td>
+                <td>
+                    01/01/1991
+                </td>
+                <td>
+                    Male
+                </td>
+                <td>
+                    <p class="text-center">
+                        <a class="btn btn-danger text-decoration-none" href="">Delete</a>
+                        <a class="btn btn-primary text-decoration-none" href="">Update</a>
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>HE153704</td>
+                <td>Nguyen Tien Dat</td>
+                <td>datnthe153704@fpt.edu.vn</td>
+                <td>
+                    <p class="text-center">
+                        <img src="/FAP/images/logo/Logo_Đại_học_FPT.png" alt="" width="100px" height="100px"
+                             style="border: 1px solid black;">
+                    </p>
+                </td>
+                <td>
+                    01/01/1991
+                </td>
+                <td>
+                    Male
+                </td>
+                <td>
+                    <p class="text-center">
+                        <a class="btn btn-danger text-decoration-none" href="">Delete</a>
+                        <a class="btn btn-primary text-decoration-none" href="">Update</a>
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>HE153704</td>
+                <td>Nguyen Tien Dat</td>
+                <td>datnthe153704@fpt.edu.vn</td>
+                <td>
+                    <p class="text-center">
+                        <img src="/FAP/images/logo/Logo_Đại_học_FPT.png" alt="" width="100px" height="100px"
+                             style="border: 1px solid black;">
+                    </p>
+                </td>
+                <td>
+                    01/01/1991
+                </td>
+                <td>
+                    Male
+                </td>
+                <td>
+                    <p class="text-center">
+                        <a class="btn btn-danger text-decoration-none" href="">Delete</a>
+                        <a class="btn btn-primary text-decoration-none" href="">Update</a>
+                    </p>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
