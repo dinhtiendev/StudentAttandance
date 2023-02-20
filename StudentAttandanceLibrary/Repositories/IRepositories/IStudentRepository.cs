@@ -15,5 +15,6 @@ namespace StudentAttandanceLibrary.Repositories.IRepositories
         public void AddStudent(StudentDto student);
         public void UpdateStudent(StudentDto student);
         public void DeleteStudent(StudentDto student);
+        public IQueryable<StudentDto> GetAllStudents();
     }
 }

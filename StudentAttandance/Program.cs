@@ -1,3 +1,8 @@
+using StudentAttandanceLibrary.Repositories.Implements;
+using StudentAttandanceLibrary.Services;
+using StudentAttandanceLibrary.Services.Interfaces;
+using TeacherAttandanceLibrary.Repositories.IRepositories;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -5,6 +10,8 @@ builder.Services.AddRazorPages(options =>
 {
     options.Conventions.AddPageRoute("/Public/Login", "/");
 });
+builder.Services.AddTransient<IExcelService, ExcelService>();
+builder.Services.AddTransient<ITeacherRepository, TeacherRepository>();
 
 var app = builder.Build();
 

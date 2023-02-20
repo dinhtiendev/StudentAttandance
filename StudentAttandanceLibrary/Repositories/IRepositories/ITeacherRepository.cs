@@ -1,4 +1,5 @@
-﻿using StudentAttandanceLibrary.Repositories.ModelDtos;
+﻿using StudentAttandanceLibrary.Models;
+using StudentAttandanceLibrary.Repositories.ModelDtos;
 
 namespace TeacherAttandanceLibrary.Repositories.IRepositories
 {
@@ -9,5 +10,7 @@ namespace TeacherAttandanceLibrary.Repositories.IRepositories
         public void AddTeacher(TeacherDto teacher);
         public void UpdateTeacher(TeacherDto teacher);
         public void DeleteTeacher(TeacherDto teacher);
+        public IQueryable<TeacherDto> GetAllTeachers();
+
     }
 }

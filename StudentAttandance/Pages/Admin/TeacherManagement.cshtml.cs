@@ -1,27 +1,45 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using StudentAttandanceLibrary.ModelValidation;
+using StudentAttandanceLibrary.CommonFunctions;
+using StudentAttandanceLibrary.Services.Interfaces;
+using System.ComponentModel.DataAnnotations;
+using TeacherAttandanceLibrary.Repositories.IRepositories;
 
 namespace StudentAttandance.Pages.Admin
 {
     public class LecturerManagementModel : PageModel
     {
         [BindProperty]
-        public IFormFile File { get; set; }
+        [Required]
+        [DataType(DataType.Upload)]
+        public IFormFile ExcelFile { get; set; }
 
-        public void OnGet()
+        AutoGenerate generate = new AutoGenerate();
+
+        private IExcelService _excelSerivce;
+        private ITeacherRepository _teacherRepository;
+
+        public LecturerManagementModel(IExcelService excelSerivce, ITeacherRepository teacherRepository)
         {
+            _excelSerivce = excelSerivce;
+            _teacherRepository = teacherRepository;
+        }
 
+        public IActionResult OnGet()
+        {
+            ViewData["TeacherList"] = _teacherRepository.GetAllTeachers().ToList();
+            return Page();
         }
 
         public IActionResult OnPostAdd()
         {
-            if (File == null)
+            if (!ModelState.IsValid)
             {
                 return Redirect("/login");
             }
+            return OnGet();
             // Form submission code here
-            return Redirect("/home");
+
         }
 
         public IActionResult OnGetDelete()
