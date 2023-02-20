@@ -26,15 +26,15 @@ namespace StudentAttandanceLibrary.Repositories.Implements
                         where account.Status == true
                         select new TeacherDto
                         {
-                           TeacherId = teacher.TeacherId,
-                           FullName = teacher.FullName,
-                           UserName = teacher.FullName,
-                           Email = account.Email,
-                           Image = teacher.Image,
-                           Dob = teacher.Dob,
-                           Gender = teacher.Gender,
-                           RoleId = account.RoleId,
-                           Status = account.Status,
+                            TeacherId = teacher.TeacherId,
+                            FullName = teacher.FullName,
+                            UserName = teacher.FullName,
+                            Email = account.Email,
+                            Image = teacher.Image,
+                            Dob = teacher.Dob,
+                            Gender = teacher.Gender,
+                            RoleId = account.RoleId,
+                            Status = account.Status,
                         };
             return query;
         }
