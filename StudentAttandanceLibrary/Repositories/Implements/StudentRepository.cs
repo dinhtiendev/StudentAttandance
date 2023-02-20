@@ -1,23 +1,25 @@
-﻿using StudentAttandanceLibrary.Repositories.IRepositories;
+﻿using StudentAttandanceLibrary.Models;
+using StudentAttandanceLibrary.Repositories.IRepositories;
 using StudentAttandanceLibrary.Repositories.ModelDtos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace StudentAttandanceLibrary.Repositories.Implements
 {
     public class StudentRepository : IStudentRepository
     {
-        public void AddStudent(StudentDto student)
+        StudentAttendanceManagementContext context = new StudentAttendanceManagementContext();
+
+        public void AddStudent(List<Account> listA, List<Student> listS)
         {
-            throw new NotImplementedException();
+            context.Accounts.AddRange(listA);
+            context.Students.AddRange(listS);
+            context.SaveChanges();
         }
 
-        public void DeleteStudent(StudentDto student)
+        public void DeleteStudent(string id)
         {
-            throw new NotImplementedException();
+            var account = context.Accounts.Where(x => x.AccountId.Equals(id)).FirstOrDefault();
+            account.Status = false;
+            context.SaveChanges();
         }
 
         public List<StudentDto> GetListStudents()
@@ -33,6 +35,34 @@ namespace StudentAttandanceLibrary.Repositories.Implements
         public void UpdateStudent(StudentDto student)
         {
             throw new NotImplementedException();
+        }
+
+        public IQueryable<StudentDto> GetAllStudents()
+        {
+            var query = from student in context.Students
+                        join account in context.Accounts
+                        on student.StudentId equals account.AccountId
+                        where account.Status == true
+                        select new StudentDto
+                        {
+                            StudentId = student.StudentId,
+                            FullName = student.FullName,
+                            UserName = student.FullName,
+                            Email = account.Email,
+                            Image = student.Image,
+                            Dob = student.Dob,
+                            Gender = student.Gender,
+                            Address = student.Address,
+                            RoleId = account.RoleId,
+                            Status = account.Status,
+                        };
+            return query;
+        }
+
+        public List<Student> GetStudents()
+        {
+            var data = context.Students.ToList();
+            return data;
         }
     }
 }

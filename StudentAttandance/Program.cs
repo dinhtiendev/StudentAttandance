@@ -1,10 +1,7 @@
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
 using StudentAttandanceLibrary.Repositories.Implements;
 using StudentAttandanceLibrary.Repositories.IRepositories;
-using System.Security.Claims;
-using System.Text;
+using StudentAttandanceLibrary.Services;
+using StudentAttandanceLibrary.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +10,8 @@ builder.Services.AddRazorPages(options =>
 {
     options.Conventions.AddPageRoute("/Public/Login", "/");
 });
+
+builder.Services.AddTransient<IExcelService, ExcelService>();
 builder.Services.AddTransient<ILogRepository, LogRepository>();
 builder.Services.AddTransient<IAdminRepository, AdminRepository>();
 builder.Services.AddTransient<IAttandanceRepository, AttandanceRepository>();

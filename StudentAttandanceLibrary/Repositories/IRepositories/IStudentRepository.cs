@@ -1,10 +1,5 @@
 ﻿using StudentAttandanceLibrary.Models;
 using StudentAttandanceLibrary.Repositories.ModelDtos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace StudentAttandanceLibrary.Repositories.IRepositories
 {
@@ -12,8 +7,10 @@ namespace StudentAttandanceLibrary.Repositories.IRepositories
     {
         public TeacherDto GetTeacherById(String id);
         public List<StudentDto> GetListStudents();
-        public void AddStudent(StudentDto student);
+        public void AddStudent(List<Account> listA,List<Student> listS);
         public void UpdateStudent(StudentDto student);
-        public void DeleteStudent(StudentDto student);
+        public void DeleteStudent(string id);
+        public IQueryable<StudentDto> GetAllStudents();
+        public List<Student> GetStudents();
     }
 }

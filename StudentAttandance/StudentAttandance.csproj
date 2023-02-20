@@ -13,7 +13,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Templates\" />
     <Folder Include="Pages\Teacher\" />
     <Folder Include="Pages\Student\" />
   </ItemGroup>
