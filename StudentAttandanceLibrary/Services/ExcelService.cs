@@ -7,29 +7,28 @@ namespace StudentAttandanceLibrary.Services
 {
     public class ExcelService : IExcelService
     {
-        public DataTable GetSheetFromTemplate(string fileName, int sheetIndex = 0)
+        public DataTable GetSheetFromTemplate(string fileName)
         {
             string pathFile = @$"{Directory.GetCurrentDirectory()}/Templates/{fileName}";
             var stream = File.OpenRead(pathFile);
             var reader = ExcelReaderFactory.CreateReader(stream);
-            var result = CreateDataSet(reader);
+            var result = GetDataSet(reader);
             var table = result.Tables;
-            var sheet = table[sheetIndex];
+            var sheet = table[0];
             return sheet;
         }
 
-        public DataTable GetSheetFromFile(IFormFile uploadFile, int sheetIndex = 0)
+        public DataTable GetSheetFromUpload(IFormFile file)
         {
             MemoryStream memoryStream = new MemoryStream();
             try
             {
-                uploadFile.CopyToAsync(memoryStream).ConfigureAwait(false);
+                file.CopyToAsync(memoryStream).ConfigureAwait(false);
                 memoryStream.Position = 0;
                 var reader = ExcelReaderFactory.CreateReader(memoryStream);
-                //Get DataSet
-                var result = CreateDataSet(reader);
+                var result = GetDataSet(reader);
                 var table = result.Tables;
-                var sheet = table[sheetIndex];
+                var sheet = table[0];
                 return sheet;
             }
             catch (Exception e)
@@ -43,15 +42,14 @@ namespace StudentAttandanceLibrary.Services
             return null;
         }
 
-        public DataTable GetSheetFromStream(MemoryStream memoryStream, int sheetIndex = 0)
+        public DataTable GetSheetFromStream(MemoryStream memoryStream)
         {
             try
             {
                 var reader = ExcelReaderFactory.CreateReader(memoryStream);
-                //Get DataSet
-                var result = CreateDataSet(reader);
+                var result = GetDataSet(reader);
                 var table = result.Tables;
-                var sheet = table[sheetIndex];
+                var sheet = table[0];
                 return sheet;
             }
             catch (Exception e)
@@ -65,35 +63,7 @@ namespace StudentAttandanceLibrary.Services
             return null;
         }
 
-        public int SheetCount(IFormFile uploadFile)
-        {
-            MemoryStream memoryStream = new MemoryStream();
-            try
-            {
-                if (uploadFile == null)
-                {
-                    return 0;
-                }
-                uploadFile.CopyToAsync(memoryStream).ConfigureAwait(false);
-                memoryStream.Position = 0;
-                var reader = ExcelReaderFactory.CreateReader(memoryStream);
-                //Get DataSet
-                var result = CreateDataSet(reader);
-                var numberOfSheet = result.Tables.Count;
-                return numberOfSheet;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            }
-            finally
-            {
-                memoryStream.Close();
-            }
-            return 0;
-        }
-
-        public List<string> GetColumnsInHeader(DataTable dataTable, int rowIndex = 0, int startColumn = 0)
+        public List<string> GetHeaderColumns(DataTable dataTable)
         {
             try
             {
@@ -104,10 +74,10 @@ namespace StudentAttandanceLibrary.Services
                 {
                     return null;
                 }
-                var numberColumn = row.Table.Columns.Count;
-                for (int i = startColumn; i < numberColumn; i++)
+                var numberColumns = row.Table.Columns.Count;
+                for (int i = 0; i < numberColumns; i++)
                 {
-                    columns.Add(Convert.ToString(dataTable!.Rows[rowIndex][i].ToString().Trim()));
+                    columns.Add(Convert.ToString(dataTable!.Rows[0][i].ToString().Trim()));
                 }
                 return columns;
             }
@@ -118,16 +88,14 @@ namespace StudentAttandanceLibrary.Services
             }
         }
 
-        public bool CheckHeaderFileExcel(List<string> columnsTemplate, List<string> columnsUpload, int rowIndex = 0, int startColumn = 0)
+        public bool CheckHeader(List<string> columnsTemplate, List<string> columnsUpload)
         {
             try
             {
-                //Check header file upload
                 if (columnsUpload == null)
                 {
                     return false;
                 }
-                //Check size of list columns template vs list columns upload
                 if (columnsTemplate.Count != columnsUpload.Count)
                 {
                     return false;
@@ -146,7 +114,7 @@ namespace StudentAttandanceLibrary.Services
             }
         }
 
-        public DataSet CreateDataSet(IExcelDataReader reader)
+        public DataSet GetDataSet(IExcelDataReader reader)
         {
             var result = reader.AsDataSet();
             return result;

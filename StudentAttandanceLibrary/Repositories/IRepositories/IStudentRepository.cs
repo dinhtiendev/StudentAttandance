@@ -7,7 +7,7 @@ namespace StudentAttandanceLibrary.Repositories.IRepositories
     {
         public TeacherDto GetTeacherById(String id);
         public List<StudentDto> GetListStudents();
-        public void AddStudent(List<Account> listA,List<Student> listS);
+        public void AddStudents(List<Account> listA,List<Student> listS);
         public void UpdateStudent(StudentDto student);
         public void DeleteStudent(string id);
         public IQueryable<StudentDto> GetAllStudents();

@@ -1,24 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using StudentAttandanceLibrary.Validation.CustomValidation;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace StudentAttandanceLibrary.Validation.ModelValidation
 {
     public class StudentList
     {
-        [Required]
+        [Required(ErrorMessage = "FullName is required.")]
+        [IsLetter(ErrorMessage = "FullName is required.")]
         public string FullName { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Date of Birth is required.")]
         public string DOB { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Gender is required.")]
         public string Gender { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Address is required.")]
         public string Address { get; set; }
     }
 }
