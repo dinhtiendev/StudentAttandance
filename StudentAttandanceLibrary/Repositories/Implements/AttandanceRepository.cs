@@ -1,5 +1,5 @@
 ﻿using StudentAttandanceLibrary.Repositories.IRepositories;
-using StudentAttandanceLibrary.Repositories.ModelDtos;
+using StudentAttandanceLibrary.ModelDtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;

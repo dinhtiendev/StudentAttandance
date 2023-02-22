@@ -1,11 +1,11 @@
 ﻿using StudentAttandanceLibrary.Models;
-using StudentAttandanceLibrary.Repositories.ModelDtos;
+using StudentAttandanceLibrary.ModelDtos;
 
 namespace StudentAttandanceLibrary.Repositories.IRepositories
 {
     public interface IStudentRepository
     {
-        public TeacherDto GetTeacherById(String id);
+        public StudentDto? GetStudentByEmail(String id);
         public List<StudentDto> GetListStudents();
         public void AddStudent(List<Account> listA,List<Student> listS);
         public void UpdateStudent(StudentDto student);

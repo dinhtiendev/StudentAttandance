@@ -1,6 +1,6 @@
 ﻿using StudentAttandanceLibrary.Models;
 using StudentAttandanceLibrary.Repositories.IRepositories;
-using StudentAttandanceLibrary.Repositories.ModelDtos;
+using StudentAttandanceLibrary.ModelDtos;
 
 namespace StudentAttandanceLibrary.Repositories.Implements
 {
@@ -27,9 +27,26 @@ namespace StudentAttandanceLibrary.Repositories.Implements
             throw new NotImplementedException();
         }
 
-        public TeacherDto GetTeacherById(string id)
+        public StudentDto? GetStudentByEmail(string email)
         {
-            throw new NotImplementedException();
+            var query = (from student in context.Students
+                        join account in context.Accounts
+                        on student.StudentId equals account.AccountId
+                        where account.Status == true
+                        select new StudentDto
+                        {
+                            StudentId = student.StudentId,
+                            FullName = student.FullName,
+                            UserName = student.FullName,
+                            Email = account.Email,
+                            Image = student.Image,
+                            Dob = student.Dob,
+                            Gender = student.Gender,
+                            Address = student.Address,
+                            RoleId = account.RoleId,
+                            Status = account.Status,
+                        }).FirstOrDefault();
+            return query;
         }
 
         public void UpdateStudent(StudentDto student)
