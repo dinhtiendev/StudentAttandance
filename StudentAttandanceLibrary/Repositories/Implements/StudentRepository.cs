@@ -8,7 +8,7 @@ namespace StudentAttandanceLibrary.Repositories.Implements
     {
         StudentAttendanceManagementContext context = new StudentAttendanceManagementContext();
 
-        public void AddStudent(List<Account> listA, List<Student> listS)
+        public void AddStudents(List<Account> listA, List<Student> listS)
         {
             context.Accounts.AddRange(listA);
             context.Students.AddRange(listS);
