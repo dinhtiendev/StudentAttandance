@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -5,6 +7,7 @@ using Newtonsoft.Json;
 using StudentAttandanceLibrary.Models;
 using StudentAttandanceLibrary.Repositories.IRepositories;
 using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
 
 namespace StudentAttandance.Pages.Public
 {
@@ -30,28 +33,28 @@ namespace StudentAttandance.Pages.Public
             {
                 ViewData["Message"] = message;
             }
-            TempData.Remove("Account");
+            HttpContext.Session.Remove("Account");
         }
-        public IActionResult OnPost()
+        public async Task<IActionResult> OnPostAsync()
         {
-
             if (ModelState.IsValid)
             {
                 Account? account = logRepository.Login(Email, Password);
                 if (account != null)
                 {
-                    //var claims = new List<Claim>
-                    //{
-                    //    new Claim(ClaimTypes.Name, account.AccountId),
-                    //    new Claim(ClaimTypes.Role, account.RoleId.ToString())
-                    //};
+                    var claims = new List<Claim>
+                    {
+                        new Claim(ClaimTypes.Name, account.AccountId),
+                        new Claim(ClaimTypes.Role, account.RoleId.ToString())
+                    };
 
-                    //var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                    //var principal = new ClaimsPrincipal(identity);
+                    var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                    var principal = new ClaimsPrincipal(identity);
 
-                    //await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
 
-                    TempData.Add("Account", JsonConvert.SerializeObject(account));
+
+                    HttpContext.Session.SetString("Account", JsonConvert.SerializeObject(account));
                     return RedirectToPage("/user/home");
                 }
             }

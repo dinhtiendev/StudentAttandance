@@ -4,10 +4,11 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace StudentAttandance.Pages.User
 {
-    //[Authorize(Roles = "1")]
-    //[Authorize]
+    //[Authorize(Roles = "Admin")]
+    //[Authorize(Policy = "RequireAdmin")]
     public class HomeModel : PageModel
     {
+        
         public void OnGet()
         {
         }
