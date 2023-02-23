@@ -13,5 +13,7 @@ namespace StudentAttandanceLibrary.Repositories.IRepositories
         public void AddTerm(Term term);
         public void UpdateTerm(Term term);
         public void DeleteTerm(Term term);
+
+        public IQueryable<Term> GetAllTerms();
     }
 }

@@ -64,5 +64,33 @@ namespace StudentAttandanceLibrary.Repositories.Implements
             var data = context.Students.ToList();
             return data;
         }
+
+        public IQueryable<Student> GetStudentsByConditions(int termId, int courseId, int groupId)
+        {
+            var query = from student in context.Students
+                        join account in context.Accounts
+                        on student.StudentId equals account.AccountId
+                        join sg in context.StudentGroups
+                        on student.StudentId equals sg.StudentId
+                        join g in context.Groups
+                        on sg.GroupId equals g.GroupId
+                        join t in context.Terms
+                        on g.TermId equals termId
+                        join c in context.Courses
+                        on g.CourseId equals courseId
+                        where t.TermId == termId && c.CourseId == courseId && g.GroupId == groupId 
+                        && account.Status == true
+                        select new Student
+                        {
+                            StudentId = student.StudentId,
+                            FullName = student.FullName,
+                            UserName = student.UserName,
+                            Image = student.Image,
+                            Dob = student.Dob,
+                            Gender = student.Gender,
+                            Address = student.Address,
+                        };
+            return query;
+        }
     }
 }
