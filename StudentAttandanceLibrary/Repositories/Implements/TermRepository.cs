@@ -10,6 +10,8 @@ namespace StudentAttandanceLibrary.Repositories.Implements
 {
     public class TermRepository : ITermRepository
     {
+        StudentAttendanceManagementContext context = new StudentAttendanceManagementContext();
+
         public void AddTerm(Term term)
         {
             throw new NotImplementedException();
@@ -18,6 +20,12 @@ namespace StudentAttandanceLibrary.Repositories.Implements
         public void DeleteTerm(Term term)
         {
             throw new NotImplementedException();
+        }
+
+        public IQueryable<Term> GetAllTerms()
+        {
+            var query = context.Terms;
+            return query;
         }
 
         public List<Term> GetListTerms()
@@ -29,5 +37,6 @@ namespace StudentAttandanceLibrary.Repositories.Implements
         {
             throw new NotImplementedException();
         }
+
     }
 }

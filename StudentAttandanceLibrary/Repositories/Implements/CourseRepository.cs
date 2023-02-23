@@ -1,4 +1,5 @@
-﻿using StudentAttandanceLibrary.Repositories.IRepositories;
+﻿using StudentAttandanceLibrary.Models;
+using StudentAttandanceLibrary.Repositories.IRepositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,8 @@ namespace StudentAttandanceLibrary.Repositories.Implements
 {
     public class CourseRepository : ICourseRepository
     {
+        StudentAttendanceManagementContext context = new StudentAttendanceManagementContext();
+
         public void AddCourse(Models.Course course)
         {
             throw new NotImplementedException();
@@ -17,6 +20,12 @@ namespace StudentAttandanceLibrary.Repositories.Implements
         public void DeleteCourse(Models.Course course)
         {
             throw new NotImplementedException();
+        }
+
+        public IQueryable<Course> GetAllCourses()
+        {
+            var query = context.Courses;
+            return query;
         }
 
         public List<Models.Course> GetListCourses()

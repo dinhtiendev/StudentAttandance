@@ -8,7 +8,7 @@ namespace StudentAttandanceLibrary.Models
         public Group()
         {
             Sessions = new HashSet<Session>();
-            Students = new HashSet<Student>();
+            StudentGroups = new HashSet<StudentGroup>();
         }
 
         public int GroupId { get; set; }
@@ -21,7 +21,6 @@ namespace StudentAttandanceLibrary.Models
         public virtual Teacher? Teacher { get; set; }
         public virtual Term Term { get; set; } = null!;
         public virtual ICollection<Session> Sessions { get; set; }
-
-        public virtual ICollection<Student> Students { get; set; }
+        public virtual ICollection<StudentGroup> StudentGroups { get; set; }
     }
 }

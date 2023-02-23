@@ -1,6 +1,10 @@
 ﻿@page "/grouplist"
+@using StudentAttandanceLibrary.Models
 @model StudentAttandance.Pages.User.GroupListModel
 @{
+    int currentTerm = (int)ViewBag.CurrentTermId;
+    int currentCourse = (int)ViewBag.CurrentCourseId;
+    int currentGroup = (int)ViewBag.CurrentGroupId;
 }
 <div class="row bg-light p-3">
     <div class="col-md-4 d-flex justify-content-start">
@@ -46,45 +50,81 @@
                 <td>
                     <table class="second-table table">
                         <tbody>
-                            <tr>
-                                <td>
-                                    <a class="text-decoration-none" href="">
-                                        Summer2017
-                                    </a>
-                                </td>
-                            </tr>
+                            @foreach (var term in ViewBag.TermList as List<Term>)
+                            {
+                                <tr>
+                                    <td>
+                                        @if (@term.TermId == @currentTerm)
+                                        {
+                                            <p>
+                                                @term.TermName
+                                            </p>
+                                        }
+                                        else
+                                        {
+                                            <a class="text-decoration-none" asp-page="/User/GroupList"
+                                       asp-route-termId="@term.TermId" asp-route-courseId="1" asp-route-groupId="0">
+                                                @term.TermName
+                                            </a>
+                                        }
+                                    </td>
+                                </tr>
+                            }
                         </tbody>
                     </table>
                 </td>
                 <td>
                     <table class="third-table table">
                         <tbody>
-                            <tr>
-                                <td>
-                                    <a class="text-decoration-none" href="">
-                                        OOP with Java
-                                        Lab(LAB211)
-                                    </a><span>
-                                        (SE1606,start
-                                        06/09/2021)
-                                    </span>
-                                </td>
-                            </tr>
+                            @foreach (var course in ViewBag.CourseList as List<Course>)
+                            {
+                                <tr>
+                                    <td>
+                                        @if (@course.CourseId == @currentCourse)
+                                        {
+                                            <p>
+                                                @course.CourseName (@course.CourseCode)
+                                            </p>
+                                        }
+                                        else
+                                        {
+                                            <a class="text-decoration-none" asp-page="/User/GroupList"
+                                       asp-route-termId="@currentTerm" asp-route-courseId="@course.CourseId" asp-route-groupId="0">
+                                                @course.CourseName (@course.CourseCode)
+                                            </a>
+                                        }
+                                    </td>
+                                </tr>
+                            }
                         </tbody>
                     </table>
                 </td>
                 <td>
                     <table class="four-table table">
                         <tbody>
-                            <tr>
-                                <td><a class="text-decoration-none" href="">SE1601</a></td>
-                            </tr>
-                            <tr>
-                                <td><a class="text-decoration-none" href="">SE1602</a></td>
-                            </tr>
-                            <tr>
-                                <td><a class="text-decoration-none" href="">SE1603</a></td>
-                            </tr>
+                            <div class="row">
+                                @* @if (@currentGroup != 0)
+                                {*@
+                                @foreach (var group in ViewBag.GroupList as List<Group>)
+                                {
+                                    <div class="col-md-3">
+                                        @if (@group.GroupId == @currentGroup)
+                                        {
+                                            <p class="mx-2">
+                                                @group.GroupName
+                                            </p>
+                                        }
+                                        else
+                                        {
+                                            <a class="text-decoration-none mx-2" asp-page="/User/GroupList"
+                                       asp-route-termId="@currentTerm" asp-route-courseId="@currentCourse" asp-route-groupId="@group.GroupId">
+                                                @group.GroupName
+                                            </a>
+                                        }
+                                    </div>
+                                }
+                                @*}*@
+                            </div>
                         </tbody>
                     </table>
                 </td>
@@ -92,30 +132,55 @@
         </tbody>
     </table>
 </div>
-<p style="font-size: 25px;" class="p-3 my-3 text-muted fw-bold">... then see student list</p>
-<div class="my-3">
-    <table class="table table-bordered">
-        <thead style="background-color: #6b90da;">
-            <tr class="align-middle">
-                <th class="fw-normal">INDEX</th>
-                <th class="fw-normal">IMAGE</th>
-                <th class="fw-normal">CODE</th>
-                <th class="fw-normal">FULL NAME</th>
-                <th class="fw-normal">GIVEN NAME</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>1</td>
-                <td class="fw-normal text-center">
-                    <img src="images/logo/Logo_Đại_học_FPT.png" alt="Image" width="100px"
-                         height="120px" style="border: 1px solid black;">
-                </td>
-                <td>HE153704</td>
-                <td>Nguyen Tien Dat</td>
-                <td>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+@if (@currentGroup != 0)
+{
+    <p style="font-size: 25px;" class="p-3 my-3 text-muted fw-bold">... then see student list</p>
+    <div class="my-3">
+        <table class="table table-bordered">
+            <thead style="background-color: #6b90da;">
+                <tr class="align-middle">
+                    <th class="fw-normal">INDEX</th>
+                    <th class="fw-normal">IMAGE</th>
+                    <th class="fw-normal">CODE</th>
+                    <th class="fw-normal">FULL NAME</th>
+                    <th class="fw-normal">GIVEN NAME</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int index = 0;
+                }
+                @foreach (var student in ViewBag.StudentList as List<Student>)
+                {
+                    index++;
+                    <tr>
+                        <td>@index</td>
+                        <td>
+                            <p class="text-center">
+                                @if (string.IsNullOrWhiteSpace(@student.Image) && @student.Gender)
+                                {
+                                    <img src="~/images/avatar/Default_Avatar_Male.png" alt="Image" width="100px" height="100px"
+                             style="border: 1px solid black;">
+                                }
+                                else if (string.IsNullOrWhiteSpace(@student.Image) && !@student.Gender)
+                                {
+                                    <img src="~/images/avatar/Default_Avatar_Female.png" alt="Image" width="100px" height="100px"
+                             style="border: 1px solid black;">
+                                }
+                                else
+                                {
+                                    <img src="~/images/avatar/@student.Image" alt="Image" width="100px" height="100px"
+                             style="border: 1px solid black;">
+                                }
+                            </p>
+                        </td>
+                        <td>@student.StudentId</td>
+                        <td>@student.FullName</td>
+                        <td>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

@@ -12,5 +12,6 @@ namespace StudentAttandanceLibrary.Repositories.IRepositories
         public void DeleteStudent(string id);
         public IQueryable<StudentDto> GetAllStudents();
         public List<Student> GetStudents();
+        public IQueryable<Student> GetStudentsByConditions(int termId, int courseId, int groupId);
     }
 }
