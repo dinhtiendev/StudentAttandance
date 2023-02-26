@@ -13,5 +13,7 @@ namespace StudentAttandanceLibrary.Repositories.IRepositories
         public void AddCourse(Course course);
         public void UpdateCourse(Course course);
         public void DeleteCourse(Course course);
+        public IQueryable<Course> GetAllCourses();
+
     }
 }

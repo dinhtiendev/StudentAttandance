@@ -22,6 +22,7 @@ builder.Services.AddTransient<IMailRepository, MailRepository>();
 builder.Services.AddTransient<IStudentRepository, StudentRepository>();
 builder.Services.AddTransient<ITeacherRepository, TeacherRepository>();
 builder.Services.AddTransient<ITermRepository, TermRepository>();
+builder.Services.AddTransient<IGroupRepository, GroupRepository>();
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(10);

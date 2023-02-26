@@ -25,6 +25,7 @@ namespace StudentAttandanceLibrary.Models
         public virtual DbSet<Room> Rooms { get; set; } = null!;
         public virtual DbSet<Session> Sessions { get; set; } = null!;
         public virtual DbSet<Student> Students { get; set; } = null!;
+        public virtual DbSet<StudentGroup> StudentGroups { get; set; } = null!;
         public virtual DbSet<Teacher> Teachers { get; set; } = null!;
         public virtual DbSet<Term> Terms { get; set; } = null!;
         public virtual DbSet<TimeSlot> TimeSlots { get; set; } = null!;
@@ -210,21 +211,25 @@ namespace StudentAttandanceLibrary.Models
                     .HasForeignKey<Student>(d => d.StudentId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Student__Student__37A5467C");
+            });
 
-                entity.HasMany(d => d.Groups)
-                    .WithMany(p => p.Students)
-                    .UsingEntity<Dictionary<string, object>>(
-                        "StudentGroup",
-                        l => l.HasOne<Group>().WithMany().HasForeignKey("GroupId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK__Student_G__Group__49C3F6B7"),
-                        r => r.HasOne<Student>().WithMany().HasForeignKey("StudentId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK__Student_G__Stude__48CFD27E"),
-                        j =>
-                        {
-                            j.HasKey("StudentId", "GroupId").HasName("PK__Student___838C84AF910C5D35");
+            modelBuilder.Entity<StudentGroup>(entity =>
+            {
+                entity.ToTable("Student_Group");
 
-                            j.ToTable("Student_Group");
+                entity.Property(e => e.StudentId).HasMaxLength(256);
 
-                            j.IndexerProperty<string>("StudentId").HasMaxLength(256);
-                        });
+                entity.HasOne(d => d.Group)
+                    .WithMany(p => p.StudentGroups)
+                    .HasForeignKey(d => d.GroupId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Student_G__Group__49C3F6B7");
+
+                entity.HasOne(d => d.Student)
+                    .WithMany(p => p.StudentGroups)
+                    .HasForeignKey(d => d.StudentId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Student_G__Stude__48CFD27E");
             });
 
             modelBuilder.Entity<Teacher>(entity =>

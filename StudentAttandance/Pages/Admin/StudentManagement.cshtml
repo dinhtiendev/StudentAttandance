@@ -1,7 +1,10 @@
 ﻿@page "/studentManagement"
 @using StudentAttandanceLibrary.ModelDtos
+@using Newtonsoft.Json
+@using StudentAttandanceLibrary.Models
 @model StudentAttandance.Pages.Admin.StudentManagementModel
 @{
+    var account = TempData["Account"];
 }
 <div class="row bg-light p-3">
     <div class="col-md-4 d-flex justify-content-start">
@@ -9,7 +12,8 @@
     </div>
     <div class="col-md-8 d-flex justify-content-end">
         <a class="text-decoration-none" href="#">
-            <span class="private-information text-light p-1 rounded-2">datnthe153704</span>
+            @*            <span class="private-information text-light p-1 rounded-2"> @(JsonConvert.DeserializeObject<Account>(account.ToString()).AccountId)</span>
+            *@
         </a> &nbsp;|&nbsp;
         <a class="text-decoration-none" href="#">
             <span class="private-information text-light p-1 rounded-2">logout</span>
@@ -31,6 +35,11 @@
             <div class="col-md-3">
                 <div class="mb-3">
                     <div class="row">
+                        <span asp-validation-for="ExcelFile" class="text-danger"></span>
+                        @if (ViewData["Message"] != null)
+                        {
+                            <span class="text-danger">@ViewData["Message"]</span>
+                        }
                         <div class="col-md-8">
                             <input class="form-control" type="file" id="formFile" asp-for="ExcelFile">
                         </div>
@@ -89,7 +98,7 @@
                             @student.Dob.ToString("dd-MM-yyyy")
                         </td>
                         <td>
-                             @if (@student.Gender)
+                            @if (@student.Gender)
                             {
                                 <p>Male</p>
                             }

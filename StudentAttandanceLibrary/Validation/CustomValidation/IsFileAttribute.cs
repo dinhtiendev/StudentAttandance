@@ -3,10 +3,14 @@ using System.ComponentModel.DataAnnotations;
 
 namespace StudentAttandanceLibrary.Validation.CustomValidation
 {
-    public class ExcelAttribute : ValidationAttribute
+    public class IsFileAttribute : ValidationAttribute
     {
 
-        public ExcelAttribute()
+    }
+
+    public class IsExcelAttribute : ValidationAttribute
+    {
+        public IsExcelAttribute()
         {
         }
 
@@ -29,6 +33,5 @@ namespace StudentAttandanceLibrary.Validation.CustomValidation
 
             return ValidationResult.Success;
         }
-
     }
 }
