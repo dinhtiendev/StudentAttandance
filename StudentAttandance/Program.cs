@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
+using StudentAttandanceLibrary.Models;
 using StudentAttandanceLibrary.Repositories.Implements;
 using StudentAttandanceLibrary.Repositories.IRepositories;
 using StudentAttandanceLibrary.Services;
@@ -27,21 +29,6 @@ builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(10);
 });
-
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-        .AddCookie(options =>
-        {
-            options.LoginPath = "/Login";
-        });
-
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy("RequireAdmin", policy =>
-    {
-        policy.RequireClaim("UserRole", "admin");
-    });
-});
-
 
 var app = builder.Build();
 

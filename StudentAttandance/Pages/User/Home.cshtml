@@ -3,52 +3,55 @@
 @using StudentAttandanceLibrary.Models
 @model StudentAttandance.Pages.User.HomeModel
 @{
+    ViewData["Title"] = "Home";
     var account = HttpContext.Session.GetString("Account");
-}
-<div class="row bg-light p-3">
-    <div class="col-md-4 d-flex justify-content-start">
-        <h6><span>Home</span></h6>
-    </div>
-    <div class="col-md-8 d-flex justify-content-end">
-        <a href="profile" class="text-decoration-none">
+    if (account != null)
+    {
+        var acc = JsonConvert.DeserializeObject<Account>(account.ToString());
+        <div class="row bg-light p-3">
+            <div class="col-md-4 d-flex justify-content-start">
+                <h6><span>Home</span></h6>
+            </div>
+            <div class="col-md-8 d-flex justify-content-end">
+                <a href="profile" class="text-decoration-none">
+                    @if (account != null)
+                    {
+                        <span class="btn btn-success text-light p-1 rounded-2">
+                            @(acc.AccountId)
+                        </span>
+                    }
+                </a> &nbsp;|&nbsp;
+                <a href="/login" class="text-decoration-none">
+                    <span class="btn btn-success text-light p-1 rounded-2">logout</span>
+                </a> &nbsp;|&nbsp;
+                <a class="text-decoration-none">
+                    <span class="btn btn-success text-light p-1 rounded-2">
+                        CAMPUS:
+                        FPTU-Hòa Lạc
+                    </span>
+                </a>
+            </div>
+        </div>
+        <div class="row my-3">
+            <div class="col-md-7 border border-light border-3 rounded-3">
+                <p class="p-2 my-4"><a class="text-decoration-none" href="#">Academic Information</a>&nbsp;(Thông tin lịch học)</p>
+                <p class="p-2 my-4"><a class="text-decoration-none" href="#">Weekly timetable</a>&nbsp;(Thời khóa biểu từng tuần)</p>
+                <p class="p-2 my-4"><a class="text-decoration-none" href="#">Attendance report</a>&nbsp;(Báo cáo điểm danh)</p>
+            </div>
+            <div class="col-md-1"></div>
             @if (account != null)
             {
-                <span class="btn btn-success text-light p-1 rounded-2">
-                    @(JsonConvert.DeserializeObject<Account>(account.ToString()).AccountId)
-                </span>
+                if (acc.RoleId == 1)
+                {
+                    <div class="col-md-4 border border-light border-3 rounded-3">
+                        <p class="p-2 my-4"><a class="text-decoration-none" href="/studentManagement">Management Students</p>
+                        <p class="p-2 my-4"><a class="text-decoration-none" href="/teacherManagement">Management Teachers</p>
+                        <p class="p-2 my-4"><a class="text-decoration-none" href="#">Management Term</p>
+                        <p class="p-2 my-4"><a class="text-decoration-none" href="#">Management Group</p>
+                        <p class="p-2 my-4"><a class="text-decoration-none" href="#">Management Course</p>
+                    </div>
+                }
             }
-        </a> &nbsp;|&nbsp;
-        <a href="/login" class="text-decoration-none">
-            <span class="btn btn-success text-light p-1 rounded-2">logout</span>
-        </a> &nbsp;|&nbsp;
-        <a class="text-decoration-none">
-            <span class="btn btn-success text-light p-1 rounded-2">
-                CAMPUS:
-                FPTU-Hòa Lạc
-            </span>
-        </a>
-    </div>
-</div>
-<div class="row my-3">
-    <div class="col-md-7 border border-light border-3 rounded-3">
-        <p class="p-2 my-4"><a class="text-decoration-none" href="#">Academic Information</a>&nbsp;(Thông tin lịch học)</p>
-        <p class="p-2 my-4"><a class="text-decoration-none" href="#">Weekly timetable</a>&nbsp;(Thời khóa biểu từng tuần)</p>
-        <p class="p-2 my-4"><a class="text-decoration-none" href="#">Attendance report</a>&nbsp;(Báo cáo điểm danh)</p>
-    </div>
-    <div class="col-md-1"></div>
-    @if (account != null)
-    {
-        if (JsonConvert.DeserializeObject<Account>(account.ToString()).RoleId == 1)
-        {
-            <div class="col-md-4 border border-light border-3 rounded-3">
-                <p class="p-2 my-4"><a class="text-decoration-none" href="#">Management Students</p>
-                <p class="p-2 my-4"><a class="text-decoration-none" href="#">Management Teachers</p>
-                <p class="p-2 my-4"><a class="text-decoration-none" href="#">Management Term</p>
-                <p class="p-2 my-4"><a class="text-decoration-none" href="#">Management Group</p>
-                <p class="p-2 my-4"><a class="text-decoration-none" href="#">Management Course</p>
-            </div>
-        }
-        
+        </div>
     }
-    
-</div>
+}

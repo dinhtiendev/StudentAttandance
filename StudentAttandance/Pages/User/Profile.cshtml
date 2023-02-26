@@ -4,79 +4,194 @@
 @using StudentAttandanceLibrary.Models
 @model StudentAttandance.Pages.User.ProfileModel
 @{
+    ViewData["Title"] = "Profile";
     var account = HttpContext.Session.GetString("Account");
-    AdminDto admin = ViewData["Admin"] as AdminDto;
-    TeacherDto teacher = ViewData["Teacher"] as TeacherDto;
-    StudentDto student = ViewData["Student"] as StudentDto;
+    if (account != null)
+    {
+        var acc = JsonConvert.DeserializeObject<Account>(account.ToString());
+        <div class="row bg-light p-3">
+            <div class="col-md-4 d-flex justify-content-start">
+                <h6>
+                    <a class="text-decoration-none" asp-page="home">Home</a>
+                    <span> | User Profile</span>
+                </h6>
+            </div>
+            <div class="col-md-8 d-flex justify-content-end">
+                <a class="text-decoration-none" href="#">
+                    <span class="btn btn-success text-light p-1 rounded-2">
+                        @(acc.AccountId)
+                    </span>
+                </a> &nbsp;|&nbsp;
+                <a class="text-decoration-none" href="login">
+                    <span class="btn btn-success text-light p-1 rounded-2">logout</span>
+                </a> &nbsp;|&nbsp;
+                <a class="text-decoration-none">
+                    <span class="btn btn-success text-light p-1 rounded-2">
+                        CAMPUS:
+                        FPTU-Hòa Lạc
+                    </span>
+                </a>
+            </div>
+        </div>
+        <h3 class="fw-normal p-3 my-3">User Detail</h3>
+        if (acc.RoleId == 1)
+        {
+            AdminDto admin = ViewData["Admin"] as AdminDto;
+            <table class="table">
+                <tbody class="mx-2">
+                    <tr>
+                        <td class="fw-bold">Full Name</td>
+                        <td class="fw-normal">
+                            @admin.FullName
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Roll Number</td>
+                        <td class="fw-normal">@admin.AdminId</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Image</td>
+                        <td class="fw-normal">
+                            <img src="@admin.Image" alt="Image" width="120px"
+                         height="150px" style="border: 1px solid black;">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Login</td>
+                        <td class="fw-normal">@admin.UserName)</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Email</td>
+                        <td class="fw-normal">@admin.Email</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Password</td>
+                        <td class="fw-normal">
+                            <div class="my-3">
+                                <a href="/changePassword" class="btn-change-password text-decoration-none text-center text-light border border-light border-3">
+                                    Change Password
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        } else if (acc.RoleId == 2)
+        {
+            TeacherDto teacher = ViewData["Teacher"] as TeacherDto;
+            <table class="table">
+                <tbody class="mx-2">
+                    <tr>
+                        <td class="fw-bold">Full Name</td>
+                        <td class="fw-normal">
+                            @(teacher.FullName)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Roll Number</td>
+                        <td class="fw-normal">@(teacher.TeacherId)</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Gender</td>
+                        @if (teacher.Gender)
+                        {
+                            <td class="fw-normal">Male</td>
+                        } else
+                        {
+                            <td class="fw-normal">Female</td>
+                        }
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Date of birth</td>
+                        <td class="fw-normal">@(teacher.Dob)</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Image</td>
+                        <td class="fw-normal">
+                            <img src="@(teacher.Image)" alt="Image" width="120px"
+                         height="150px" style="border: 1px solid black;">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Login</td>
+                        <td class="fw-normal">@(teacher.UserName)</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Email</td>
+                        <td class="fw-normal">@(teacher.Email)</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Password</td>
+                        <td class="fw-normal">
+                            <div class="my-3">
+                                <a href="/changePassword" class="btn-change-password text-decoration-none text-center text-light border border-light border-3">
+                                    Change Password
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        }else if (acc.RoleId == 3)
+        {
+            StudentDto student = ViewData["Student"] as StudentDto;
+            <table class="table">
+                <tbody class="mx-2">
+                    <tr>
+                        <td class="fw-bold">Full Name</td>
+                        <td class="fw-normal">
+                            @(student.FullName)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Roll Number</td>
+                        <td class="fw-normal">@(student.StudentId)</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Gender</td>
+                        @if (student.Gender)
+                        {
+                            <td class="fw-normal">Male</td>
+                        } else
+                        {
+                            <td class="fw-normal">Female</td>
+                        }
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Date of birth</td>
+                        <td class="fw-normal">@(student.Dob)</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Address</td>
+                        <td class="fw-normal">@(student.Address)</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Image</td>
+                        <td class="fw-normal">
+                            <img src="@(student.Image)" alt="Image" width="120px"
+                         height="150px" style="border: 1px solid black;">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Login</td>
+                        <td class="fw-normal">@(student.UserName)</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Email</td>
+                        <td class="fw-normal">@(student.Email)</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Password</td>
+                        <td class="fw-normal">
+                            <div class="my-3">
+                                <a href="/changePassword" class="btn-change-password text-decoration-none text-center text-light border border-light border-3">
+                                    Change Password
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        }
+    }
 }
-<div class="row bg-light p-3">
-    <div class="col-md-4 d-flex justify-content-start">
-        <h6>
-            <a class="text-decoration-none" asp-page="home">Home</a>
-            <span> | User Profile</span>
-        </h6>
-    </div>
-    <div class="col-md-8 d-flex justify-content-end">
-        <a class="text-decoration-none" href="#">
-            @if (account != null)
-            {
-                <span class="btn btn-success text-light p-1 rounded-2">
-                    @(JsonConvert.DeserializeObject<Account>(account.ToString()).AccountId)
-                </span>
-            }
-        </a> &nbsp;|&nbsp;
-        <a class="text-decoration-none" href="#">
-            <span class="btn btn-success text-light p-1 rounded-2">logout</span>
-        </a> &nbsp;|&nbsp;
-        <a class="text-decoration-none">
-            <span class="btn btn-success text-light p-1 rounded-2">
-                CAMPUS:
-                FPTU-Hòa Lạc
-            </span>
-        </a>
-    </div>
-</div>
-<h3 class="fw-normal p-3 my-3">User Detail</h3>
-<table class="table">
-    <tbody class="mx-2">
-        <tr>
-            <td class="fw-bold">Full Name</td>
-            <td class="fw-normal">
-                @(admin.FullName)
-            </td>
-        </tr>
-        <tr>
-            <td class="fw-bold">Roll Number</td>
-            <td class="fw-normal">HE153704</td>
-        </tr>
-        <tr>
-            <td class="fw-bold">Gender</td>
-            <td class="fw-normal">Male</td>
-        </tr>
-        <tr>
-            <td class="fw-bold">Image</td>
-            <td class="fw-normal">
-                <img src="@(admin.Image)" alt="Image" width="120px"
-                     height="150px" style="border: 1px solid black;">
-            </td>
-        </tr>
-        <tr>
-            <td class="fw-bold">Login</td>
-            <td class="fw-normal">@(admin.UserName)</td>
-        </tr>
-        <tr>
-            <td class="fw-bold">Email</td>
-            <td class="fw-normal">@(admin.Email)</td>
-        </tr>
-        <tr>
-            <td class="fw-bold">Password</td>
-            <td class="fw-normal">
-                <div class="my-3">
-                    <a href="/changePassword" class="btn-change-password text-decoration-none text-center text-light border border-light border-3">
-                        Change Password
-                    </a>
-                </div>
-            </td>
-        </tr>
-    </tbody>
-</table>

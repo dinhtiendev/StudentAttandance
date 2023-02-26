@@ -20,7 +20,7 @@ namespace StudentAttandance.Pages.User
             this.studentRepository = studentRepository;
         }
 
-        public void OnGet()
+        public IActionResult OnGet()
         {
             var account = HttpContext.Session.GetString("Account");
             if (account != null)
@@ -38,11 +38,10 @@ namespace StudentAttandance.Pages.User
                 {
                     StudentDto? student = studentRepository.GetStudentByEmail(acc.Email);
                     ViewData["Student"] = student;
-                } else
-                {
-
                 }
+                return Page();
             }
+            return RedirectToPage("/error");
         }
     }
 }
