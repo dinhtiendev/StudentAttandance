@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StudentAttandanceLibrary.Repositories.ModelDtos
+namespace StudentAttandanceLibrary.ModelDtos
 {
     public class StudentDto
     {

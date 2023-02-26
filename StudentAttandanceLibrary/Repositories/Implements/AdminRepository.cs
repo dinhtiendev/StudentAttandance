@@ -1,11 +1,6 @@
 ﻿using StudentAttandanceLibrary.ModelDtos;
 using StudentAttandanceLibrary.Models;
 using StudentAttandanceLibrary.Repositories.IRepositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace StudentAttandanceLibrary.Repositories.Implements
 {
@@ -31,7 +26,16 @@ namespace StudentAttandanceLibrary.Repositories.Implements
                     Email = account.Email,
                     RoleId = account.RoleId,
                     Status = account.Status,
-                }) as AdminDto;
+                }).Select(joined => new AdminDto
+                {
+                    AdminId = joined.AdminId,
+                    FullName = joined.FullName,
+                    UserName = joined.UserName,
+                    Image = joined.Image,
+                    Email = joined.Email,
+                    RoleId = joined.RoleId,
+                    Status = joined.Status,
+                }).FirstOrDefault(x => x.Email.CompareTo(email) == 0);
         }
     }
 }

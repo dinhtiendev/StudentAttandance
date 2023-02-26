@@ -1,9 +1,13 @@
 ﻿@page "/profile"
 @using Newtonsoft.Json
+@using StudentAttandanceLibrary.ModelDtos
 @using StudentAttandanceLibrary.Models
 @model StudentAttandance.Pages.User.ProfileModel
 @{
     var account = HttpContext.Session.GetString("Account");
+    AdminDto admin = ViewData["Admin"] as AdminDto;
+    TeacherDto teacher = ViewData["Teacher"] as TeacherDto;
+    StudentDto student = ViewData["Student"] as StudentDto;
 }
 <div class="row bg-light p-3">
     <div class="col-md-4 d-flex justify-content-start">
@@ -37,7 +41,8 @@
     <tbody class="mx-2">
         <tr>
             <td class="fw-bold">Full Name</td>
-            <td class="fw-normal">123
+            <td class="fw-normal">
+                @(admin.FullName)
             </td>
         </tr>
         <tr>
@@ -45,34 +50,33 @@
             <td class="fw-normal">HE153704</td>
         </tr>
         <tr>
-            <td class="fw-bold">Image</td>
-            <td class="fw-normal">
-                <img src="images/logo/Logo_Đại_học_FPT.png" alt="Image" width="120px"
-                     height="150px" style="border: 1px solid black;">
-            </td>
-        </tr>
-        <tr>
             <td class="fw-bold">Gender</td>
             <td class="fw-normal">Male</td>
         </tr>
         <tr>
+            <td class="fw-bold">Image</td>
+            <td class="fw-normal">
+                <img src="@(admin.Image)" alt="Image" width="120px"
+                     height="150px" style="border: 1px solid black;">
+            </td>
+        </tr>
+        <tr>
             <td class="fw-bold">Login</td>
-            <td class="fw-normal">DatNTHE153704</td>
+            <td class="fw-normal">@(admin.UserName)</td>
         </tr>
         <tr>
             <td class="fw-bold">Email</td>
-            <td class="fw-normal">DatNTHE153704@fpt.edu.vn</td>
+            <td class="fw-normal">@(admin.Email)</td>
         </tr>
         <tr>
             <td class="fw-bold">Password</td>
             <td class="fw-normal">
                 <div class="my-3">
-                    <a class="btn-change-password text-decoration-none text-center text-light
-                        border border-light border-3" href="#">Change Password</a>
+                    <a href="/changePassword" class="btn-change-password text-decoration-none text-center text-light border border-light border-3">
+                        Change Password
+                    </a>
                 </div>
             </td>
         </tr>
     </tbody>
 </table>
-<div class="my-5">
-</div>
