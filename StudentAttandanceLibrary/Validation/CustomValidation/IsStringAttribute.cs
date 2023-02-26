@@ -33,4 +33,33 @@ namespace StudentAttandanceLibrary.Validation.CustomValidation
             return ValidationResult.Success;
         }
     }
+
+    public class IsSamePassword : ValidationAttribute
+    {
+        private readonly string _passwordPropertyName;
+
+        public IsSamePassword(string passwordPropertyName)
+        {
+            _passwordPropertyName = passwordPropertyName;
+        }
+
+        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+        {
+            var passwordProperty = validationContext.ObjectType.GetProperty(_passwordPropertyName);
+            if (passwordProperty == null)
+            {
+                return new ValidationResult($"Unknown property {_passwordPropertyName}");
+            }
+
+            var passwordValue = passwordProperty.GetValue(validationContext.ObjectInstance, null) as string;
+            var confirmationValue = value as string;
+
+            if (passwordValue != confirmationValue)
+            {
+                return new ValidationResult("The password and confirmation password do not match.");
+            }
+
+            return ValidationResult.Success;
+        }
+    }
 }

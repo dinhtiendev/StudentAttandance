@@ -30,8 +30,14 @@ namespace StudentAttandance.Pages.Public
             {
                 if (logRepository.ConfirmEmail(Email))
                 {
-                    mailRepository.sendNewPassword(Email);
-                    ViewData["Message"] = "Open your email to get a new password!";
+                    var pw = mailRepository.sendNewPassword(Email);
+                    if (logRepository.ChangePassword(Email, pw))
+                    {
+                        ViewData["Message"] = "Open your email to get a new password!";
+                    } else
+                    {
+                        ViewData["Message"] = "Your email is wrong!";
+                    }
                 }
                 else
                 {
