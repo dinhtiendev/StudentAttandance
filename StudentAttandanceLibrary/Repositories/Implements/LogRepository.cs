@@ -29,6 +29,22 @@ namespace StudentAttandanceLibrary.Repositories.Implements
             return false;
         }
 
+        public bool ChangePassword(string email, string oldPassword, string newPassword)
+        {
+            var acc = context.Accounts.FirstOrDefault(x => x.Email == email);
+            if (acc != null)
+            {
+                if (acc.Password.CompareTo(oldPassword) == 0)
+                {
+                    acc.Password = newPassword;
+                    context.Accounts.Update(acc);
+                    context.SaveChanges();
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public bool ConfirmEmail(string email)
         {
             return context.Accounts.Any(a => a.Email == email);

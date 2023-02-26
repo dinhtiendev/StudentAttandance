@@ -1,5 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Newtonsoft.Json;
+using StudentAttandanceLibrary.Models;
+using StudentAttandanceLibrary.Repositories.IRepositories;
+using StudentAttandanceLibrary.Validation.CustomValidation;
 using System.ComponentModel.DataAnnotations;
 
 namespace StudentAttandance.Pages.User
@@ -16,50 +20,41 @@ namespace StudentAttandance.Pages.User
         public string NewPassword { get; set; }
         [Required(ErrorMessage = "Password is required")]
         [MinLength(5, ErrorMessage = "Password must be at least 5 characters long")]
-        [ConfirmPassword("NewPassword", ErrorMessage = "The new password and confirm password do not match.")]
+        [IsSamePassword("NewPassword", ErrorMessage = "The new password and confirm password do not match.")]
         [BindProperty]
         public string ConfirmPassword { get; set; }
+        private ILogRepository logRepository;
+        public ChangePasswordModel(ILogRepository logRepository)
+        {
+            this.logRepository = logRepository;
+        }
         public void OnGet()
         {
         }
 
         public IActionResult OnPost()
         {
-            if (ModelState.IsValid)
+            var account = HttpContext.Session.GetString("Account");
+            if (account != null)
             {
-
+                var acc = JsonConvert.DeserializeObject<Account>(account.ToString());
+                if (ModelState.IsValid)
+                {
+                    if (logRepository.ConfirmEmail(acc.Email))
+                    {
+                        if (logRepository.ChangePassword(acc.Email, OldPassword, NewPassword))
+                        {
+                            ViewData["Message"] = "Your password has changed!";
+                        } else
+                        {
+                            ViewData["Message"] = "Your password is wrong!";
+                        }
+                    }
+                }
+                return Page();
             }
-            return Page();
-        }
-    }
-
-
-    class ConfirmPasswordAttribute : ValidationAttribute
-    {
-        private readonly string _passwordPropertyName;
-
-        public ConfirmPasswordAttribute(string passwordPropertyName)
-        {
-            _passwordPropertyName = passwordPropertyName;
-        }
-
-        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
-        {
-            var passwordProperty = validationContext.ObjectType.GetProperty(_passwordPropertyName);
-            if (passwordProperty == null)
-            {
-                return new ValidationResult($"Unknown property {_passwordPropertyName}");
-            }
-
-            var passwordValue = passwordProperty.GetValue(validationContext.ObjectInstance, null) as string;
-            var confirmationValue = value as string;
-
-            if (passwordValue != confirmationValue)
-            {
-                return new ValidationResult("The password and confirmation password do not match.");
-            }
-
-            return ValidationResult.Success;
+            return RedirectToPage("/error");
+            
         }
     }
 }
