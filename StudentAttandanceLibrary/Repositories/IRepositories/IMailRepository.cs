@@ -8,6 +8,6 @@ namespace StudentAttandanceLibrary.Repositories.IRepositories
 {
     public interface IMailRepository
     {
-        public void sendNewPassword(string sender);
+        public string sendNewPassword(string sender);
     }
 }

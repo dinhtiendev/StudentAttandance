@@ -15,9 +15,18 @@ namespace StudentAttandanceLibrary.Repositories.Implements
         {
             context = new StudentAttendanceManagementContext();
         }
-        public bool ChangePassword(string email, string oldPassword, string newPassword)
+
+        public bool ChangePassword(string email, string newPassword)
         {
-            throw new NotImplementedException();
+            var acc = context.Accounts.FirstOrDefault(x => x.Email == email);
+            if (acc != null)
+            {
+                acc.Password = newPassword;
+                context.Accounts.Update(acc);
+                context.SaveChanges();
+                return true;
+            }
+            return false;
         }
 
         public bool ConfirmEmail(string email)
