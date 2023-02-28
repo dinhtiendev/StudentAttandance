@@ -1,7 +1,9 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using StudentAttandanceLibrary.Repositories.Implements;
 using StudentAttandanceLibrary.Repositories.IRepositories;
 using StudentAttandanceLibrary.Services;
 using StudentAttandanceLibrary.Services.Interfaces;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,22 +23,24 @@ builder.Services.AddTransient<IStudentRepository, StudentRepository>();
 builder.Services.AddTransient<ITeacherRepository, TeacherRepository>();
 builder.Services.AddTransient<ITermRepository, TermRepository>();
 builder.Services.AddTransient<IGroupRepository, GroupRepository>();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(10);
+});
 
-builder.Services.AddSession();
-//builder.Services.AddAuthentication(options =>
-//    {
-//        options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-//        options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-//        options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-//    })
-//    .AddCookie(options =>
-//    {
-//        options.LoginPath = "/Login";
-//    });
-//builder.Services.AddAuthorization(options =>
-// {
-//     options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("1"));
-// });
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+        .AddCookie(options =>
+        {
+            options.LoginPath = "/Login";
+        });
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("RequireAdmin", policy =>
+    {
+        policy.RequireClaim("UserRole", "admin");
+    });
+});
 
 
 var app = builder.Build();
