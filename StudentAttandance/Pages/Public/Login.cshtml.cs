@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
@@ -27,33 +28,22 @@ namespace StudentAttandance.Pages.Public
         {
             this.logRepository = logRepository;
         }
-        public void OnGet(string message)
+        public IActionResult OnGet(string message)
         {
             if (message != null)
             {
                 ViewData["Message"] = message;
             }
             HttpContext.Session.Remove("Account");
+            return Page();
         }
-        public async Task<IActionResult> OnPostAsync()
+        public IActionResult OnPost()
         {
             if (ModelState.IsValid)
             {
                 Account? account = logRepository.Login(Email, Password);
                 if (account != null)
                 {
-                    var claims = new List<Claim>
-                    {
-                        new Claim(ClaimTypes.Name, account.AccountId),
-                        new Claim(ClaimTypes.Role, account.RoleId.ToString())
-                    };
-
-                    var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                    var principal = new ClaimsPrincipal(identity);
-
-                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
-
-
                     HttpContext.Session.SetString("Account", JsonConvert.SerializeObject(account));
                     return RedirectToPage("/user/home");
                 }

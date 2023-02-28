@@ -4,13 +4,17 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace StudentAttandance.Pages.User
 {
-    //[Authorize(Roles = "Admin")]
-    //[Authorize(Policy = "RequireAdmin")]
     public class HomeModel : PageModel
     {
         
-        public void OnGet()
+        public IActionResult OnGet()
         {
+            var account = HttpContext.Session.GetString("Account");
+            if (account != null)
+            {
+                return Page();
+            }
+            return RedirectToPage("/error");
         }
     }
 }

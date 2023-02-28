@@ -10,21 +10,24 @@ namespace StudentAttandanceLibrary.Repositories.Implements
 {
     public class MailRepository : IMailRepository
     {
-        public void sendNewPassword(String sender)
+        public string sendNewPassword(String sender)
         {
-            string to = "tiendvhe153729@fpt.edu.vn";
-            string from = sender;
-            string subject = "New Password";
-            string body = "This is your new password: " + RandomString(10);
+            var password = RandomString(10);
+            // Create a new MailMessage object
+            MailMessage message = new MailMessage();
+            message.From = new MailAddress("tiendvhe153729@fpt.edu.vn");
+            message.To.Add(new MailAddress(sender));
+            message.Subject = "New Password";
+            
+            message.Body = "This is your new password: " + password;
+            // Create a new SmtpClient object
+            SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587);
+            smtpClient.Credentials = new System.Net.NetworkCredential("tiendvhe153729@fpt.edu.vn", "tienhocngu");
+            smtpClient.EnableSsl = true;
 
-            MailMessage message = new MailMessage(from, to, subject, body);
-
-            SmtpClient client = new SmtpClient("smtp.example.com");
-            client.Port = 587;
-            client.Credentials = new System.Net.NetworkCredential("tiendvhe153729@fpt.edu.vn", "tien261001");
-            client.EnableSsl = true;
-
-            client.Send(message);
+            // Send the email message
+            smtpClient.Send(message);
+            return password;
         }
         private string RandomString(int length)
         {
