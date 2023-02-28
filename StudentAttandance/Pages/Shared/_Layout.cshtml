@@ -12,6 +12,11 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/StudentAttandance.styles.css" asp-append-version="true" />
+    <style>
+        .private-information {
+            background-color: #5cb85c;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -20,6 +25,10 @@
         </header>
         @RenderBody()
         <footer>
+            <p class="text-center my-2"> <span class="fw-bold">Mọi góp ý, thắc mắc xin liên hệ:</span> Email: <span><a
+                        class="text-decoration-none" href="#">admin@fe.edu.vn</a></span>. Điện thoại:
+                <span class="fw-bold">(+84) 123.456.789</span>
+            </p>
             <p class="text-center">
                 © Powered by <span><a class="name-university text-decoration-none" href="">FPT University</a></span>
             </p>
