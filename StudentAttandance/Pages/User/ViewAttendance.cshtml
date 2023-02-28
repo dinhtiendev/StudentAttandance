@@ -1,0 +1,171 @@
+﻿@page "/student/viewattendance"
+@model StudentAttandance.Pages.StudentPage.ViewAttendanceModel
+@{
+
+}
+<div class="row bg-light p-3">
+    <div class="col-md-4 d-flex justify-content-start">
+        <h6><a class="text-decoration-none" href="">Home</a><span> | View Schedule</span></h6>
+    </div>
+    <div class="col-md-8 d-flex justify-content-end">
+        <a class="text-decoration-none" href="#">
+            <span class="private-information text-light p-1 rounded-2">datnthe153704</span>
+        </a> &nbsp;|&nbsp;
+        <a class="text-decoration-none" href="#">
+            <span class="private-information text-light p-1 rounded-2">logout</span>
+        </a> &nbsp;|&nbsp;
+        <a class="text-decoration-none">
+            <span class="private-information text-light p-1 rounded-2">
+                CAMPUS:
+                FPTU-Hòa Lạc
+            </span>
+        </a>
+    </div>
+</div>
+<p style="font-size: 30px;" class="p-3 my-3">View attendance for Nguyễn Tiến Đạt (DatNTHE153704)</p>
+<p style="font-size: 25px;" class="p-3 my-3">Select a campus/program, term, course ...</p>
+<div class="row my-3">
+    <div class="col-md-4">
+        <table class="table table-bordered">
+            <thead style="background-color: #6b90da;">
+                <tr>
+                    <th class="fw-normal">CAMPUS/PROGRAM</th>
+                    <th class="fw-normal">TERM</th>
+                    <th class="fw-normal">COURSE</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <table class="first-table table">
+                            <tbody>
+                                <tr>
+                                    <td><b>FU-HL</b></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                    <td>
+                        <table class="second-table table">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <a class="text-decoration-none" href="">
+                                            Summer2017
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                    <td>
+                        <table class="third-table table">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <a class="text-decoration-none" href="">
+                                            OOP with Java
+                                            Lab(LAB211)
+                                        </a><span>
+                                            (SE1606,start
+                                            06/09/2021)
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-8">
+        <table class="table table-bordered">
+            <thead style="background-color: #6b90da;">
+                <tr class="align-middle">
+                    <th class="fw-normal ">NO</th>
+                    <th class="fw-normal">DATE</th>
+                    <th class="fw-normal">SLOT</th>
+                    <th class="fw-normal">ROOM</th>
+                    <th class="fw-normal">LECTURER</th>
+                    <th class="fw-normal">GROUP NAME</th>
+                    <th class="fw-normal">ATTEDANCE STATUS</th>
+                    <th class="fw-normal">LECTURER'S COMMENT</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>
+                        <p style="font-size: 12px; color: white; font-weight: bold; width: 150px;"
+                           class="p-1 text-center bg-primary border border-light border-3 rounded-3">
+                            Monday
+                            06/09/2021
+                        </p>
+                    </td>
+                    <td>
+                        <p style="font-size: 12px; color: white; font-weight: bold; width: 150px;"
+                           class="p-1 text-center bg-danger border border-light border-3 rounded-3">
+                            3_(10:50-12:20)
+                        </p>
+                    </td>
+                    <td>BE-220</td>
+                    <td>HanhVB</td>
+                    <td>SE1606</td>
+                    <td>
+                        <p style="color: green;">Present</p>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>
+                        <p style="font-size: 12px; color: white; font-weight: bold; width: 150px;"
+                           class="p-1 text-center bg-primary border border-light border-3 rounded-3">
+                            Monday
+                            06/09/2021
+                        </p>
+                    </td>
+                    <td>
+                        <p style="font-size: 12px; color: white; font-weight: bold; width: 150px;"
+                           class="p-1 text-center bg-danger border border-light border-3 rounded-3">
+                            3_(10:50-12:20)
+                        </p>
+                    </td>
+                    <td>BE-220</td>
+                    <td>HanhVB</td>
+                    <td>SE1606</td>
+                    <td>
+                        <p style="color: red;">Present</p>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>
+                        <p style="font-size: 12px; color: white; font-weight: bold; width: 150px;"
+                           class="p-1 text-center bg-primary border border-light border-3 rounded-3">
+                            Monday
+                            06/09/2021
+                        </p>
+                    </td>
+                    <td>
+                        <p style="font-size: 12px; color: white; font-weight: bold; width: 150px;"
+                           class="p-1 text-center bg-danger border border-light border-3 rounded-3">
+                            3_(10:50-12:20)
+                        </p>
+                    </td>
+                    <td>BE-220</td>
+                    <td>HanhVB</td>
+                    <td>SE1606</td>
+                    <td>
+                        <p>Present</p>
+                    </td>
+                    <td></td>
+                </tr>
+
+            </tbody>
+        </table>
+        <h6 class="p-2">ABSENT: 0% ABSENT SO FAR (0 ABSENT ON 30 TOTAL).</h6>
+    </div>
+</div>

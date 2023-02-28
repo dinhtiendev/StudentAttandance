@@ -22,7 +22,6 @@ namespace StudentAttandance.Pages.User
         }
         public void OnGet(int termId, int courseId, int groupId)
         {
-
             ViewData["TermList"] = _termRepository.GetAllTerms().ToList();
             if (termId == 0 || termId > _termRepository.GetAllTerms().Count())
             {
