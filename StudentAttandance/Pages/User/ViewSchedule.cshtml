@@ -1,0 +1,132 @@
+﻿@page "/viewSchedule"
+@using Newtonsoft.Json
+@using StudentAttandanceLibrary.Models
+@model StudentAttandance.Pages.User.ViewScheduleModel
+@{
+    ViewData["Title"] = "View Schedule";
+    var account = HttpContext.Session.GetString("Account");
+    if (account != null)
+    {
+        var getWeeks = (List<List<DateTime>>)ViewData["Weeks"];
+        var year = (int)ViewData["Year"];
+        var week = (int)ViewData["Week"];
+        var acc = JsonConvert.DeserializeObject<Account>(account.ToString());
+        <div class="row bg-light p-3">
+            <div class="col-md-4 d-flex justify-content-start">
+                <h6><a class="text-decoration-none" href="">Home</a><span> | View Schedule</span></h6>
+            </div>
+            <div class="col-md-8 d-flex justify-content-end">
+                <a class="text-decoration-none" href="#">
+                    <span class="private-information text-light p-1 rounded-2">@(acc.AccountId)</span>
+                </a> &nbsp;|&nbsp;
+                <a class="text-decoration-none" href="#">
+                    <span class="private-information text-light p-1 rounded-2">logout</span>
+                </a> &nbsp;|&nbsp;
+                <a class="text-decoration-none">
+                    <span class="private-information text-light p-1 rounded-2">
+                        CAMPUS:
+                        FPTU-Hòa Lạc
+                    </span>
+                </a>
+            </div>
+        </div>
+        <p style="font-size: 30px;" class="p-3 my-3">View attendance for Đinh Văn Tiến (TienDVHE153729)</p>
+        <p style="font-size: 20px;" class="p-3 my-3">
+            <b>Note:</b> These activities do not include extra-curriculum activities, such as club activities ...
+            <br>
+            <b>Chú thích:</b> Các hoạt động trong bảng dưới không bao gồm hoạt động ngoại khóa, ví dụ như hoạt động câu lạc bộ ...
+            <br>
+            Các phòng bắt đầu bằng AL thuộc tòa nhà Alpha. VD: AL...<br>
+            Các phòng bắt đầu bằng BE thuộc tòa nhà Beta. VD: BE,..<br>
+            Các phòng bắt đầu bằng G thuộc tòa nhà Gamma. VD: G201,...<br>
+            Các phòng tập bằng đầu bằng R thuộc khu vực sân tập Vovinam.<br>
+            Các phòng bắt đầu bằng DE thuộc tòa nhà Delta. VD: DE,..<br>
+            Little UK (LUK) thuộc tầng 5 tòa nhà Delta
+        </p>
+        <div class="row my-12">
+            <table class="table table-bordered">
+                <thead style="background-color: #6b90da;">
+                    <tr class="align-middle">
+                        <th class="fw-normal ">
+                            YEAR
+                            <form method="get">
+                                <select id="year" name="year">
+                                    @for(int i = 2021; i <= 2024; i++)
+                                    {
+                                        <option value="@i" selected="@(year==i)">@i</option>
+                                    }
+                                </select>
+                            <button type="submit">Submit</button>
+                            </form>
+                            <br>
+                            WEEK
+                            <form method="get">
+                                <input value="@year" name="year" hidden/>
+                                <select id="weeks" name="week">
+                                    @for (int i = 0; i < getWeeks.Count; i++)
+                                    {
+                                        <option value="@i" selected="@(week==i)">@getWeeks[i][0].ToString("dd/MM") To @getWeeks[i][6].ToString("dd/MM")</option>
+                                    }
+                                </select>
+                                <button type="submit">Submit</button>
+                            </form>
+                        </th>
+                        @for (int i = 0; i < 7; i++)
+                        {
+                            <th class="fw-normal">
+                                @getWeeks[week][i].DayOfWeek
+                                <br />
+                                @getWeeks[week][i].ToString("dd/MM")
+                            </th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 1; i < 7; i++)
+                    {
+                        <tr>
+                            <td>Slot @i</td>
+                            @for (int j = 0; j < 7; j++)
+                            {
+                                <td>
+                                    @{bool check = false;}
+                                    @foreach (var session in Model.listAttandance)
+                                        @if (@getWeeks[week][j].Equals(session.Date) && session.TimeSlot.TimeSlotId == i)
+                                        {
+                                            check = true;
+                                            <p>
+                                                <a href="#">PRM392</a><br>
+                                                at BE-401<br>
+                                                (<font color="red">Not yet</font>)<br>
+                                                <span>(7:30-9:50)</span><br>
+                                            </p>
+                                        }
+                                    @if (!check)
+                                    {
+                                        <p>-</p>
+                                    }
+                                </td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+}
+@*<td>
+    <p>
+        <a href="#">PRM392</a><br>
+        at BE-401<br>
+        (<font color="Green">attended</font>)<br>
+        <span>(7:30-9:50)</span><br>
+    </p>
+</td>
+<td>
+    <p>
+        <a href="#">ENW492c</a><br>
+        at Phòng tự học 14 <br>
+        (<font color="Red">absent</font>)<br>
+        <span>(7:30-9:50)</span><br>
+    </p>
+</td>*@
