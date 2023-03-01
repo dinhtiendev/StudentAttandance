@@ -14,10 +14,10 @@ namespace StudentAttandanceLibrary.ModelDtos
         public bool Present { get; set; }
         public string? Description { get; set; }
         public int SessionId { get; set; }
-        public Group Group { get; set; }
+        public string GroupName { get; set; }
         public TimeSlot TimeSlot { get; set; }
         public int RoomId { get; set; }
-        public string TeacherId { get; set; } = null!;
+        public string TeacherName { get; set; } = null!;
         public DateTime Date { get; set; }
         public int Index { get; set; }
         public bool? Attanded { get; set; }
