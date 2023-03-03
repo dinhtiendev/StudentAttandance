@@ -43,6 +43,7 @@ namespace StudentAttandanceLibrary.Repositories.Implements
                              AttendanceId = attendance.AttendanceId,
                              Date = session.Date,
                              Index = session.Index,
+                             RoomName = room.RoomName,
                              Attanded = session.Attanded,
                              TeacherName = teacher.UserName,
                              TimeSlot = new TimeSlot { TimeSlotId = timeSlot.TimeSlotId, Description = timeSlot.Description },

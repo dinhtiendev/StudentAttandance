@@ -95,10 +95,26 @@
                                         {
                                             check = true;
                                             <p>
-                                                <a href="#">PRM392</a><br>
-                                                at BE-401<br>
-                                                (<font color="red">Not yet</font>)<br>
-                                                <span>(7:30-9:50)</span><br>
+                                                <a href="#">@session.GroupName</a><br>
+                                                at @session.RoomName<br>
+                                                (
+                                                @if (!session.Attanded ?? true)
+                                                {
+                                                    <font color="red">Not yet</font>
+                                                }
+                                                else
+                                                {
+                                                    if (session.Present)
+                                                    {
+                                                        <font color="Green">attended</font>
+                                                    }
+                                                    else
+                                                    {
+                                                        <font color="Red">absent</font>
+                                                    }
+                                                }
+                                                )<br>
+                                                <span>(@session.TimeSlot.Description)</span><br>
                                             </p>
                                         }
                                     @if (!check)
@@ -114,19 +130,3 @@
         </div>
     }
 }
-@*<td>
-    <p>
-        <a href="#">PRM392</a><br>
-        at BE-401<br>
-        (<font color="Green">attended</font>)<br>
-        <span>(7:30-9:50)</span><br>
-    </p>
-</td>
-<td>
-    <p>
-        <a href="#">ENW492c</a><br>
-        at Phòng tự học 14 <br>
-        (<font color="Red">absent</font>)<br>
-        <span>(7:30-9:50)</span><br>
-    </p>
-</td>*@

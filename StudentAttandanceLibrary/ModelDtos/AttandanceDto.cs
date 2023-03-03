@@ -16,7 +16,7 @@ namespace StudentAttandanceLibrary.ModelDtos
         public int SessionId { get; set; }
         public string GroupName { get; set; }
         public TimeSlot TimeSlot { get; set; }
-        public int RoomId { get; set; }
+        public string RoomName { get; set; }
         public string TeacherName { get; set; } = null!;
         public DateTime Date { get; set; }
         public int Index { get; set; }
