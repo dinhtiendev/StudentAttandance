@@ -22,7 +22,7 @@ namespace StudentAttandanceLibrary.Repositories.Implements
             message.Body = "This is your new password: " + password;
             // Create a new SmtpClient object
             SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587);
-            smtpClient.Credentials = new System.Net.NetworkCredential("tiendvhe153729@fpt.edu.vn", "tienhocngu");
+            smtpClient.Credentials = new System.Net.NetworkCredential("tiendvhe153729@fpt.edu.vn", "urPasswrod");
             smtpClient.EnableSsl = true;
 
             // Send the email message
