@@ -15,7 +15,35 @@ namespace StudentAttandanceLibrary.Repositories.Implements
 
         public AttandanceDto GetAttandanceById(int id)
         {
-            throw new NotImplementedException();
+            var query = (from session in context.Sessions
+                         join attendance in context.Attendances
+                         on session.SessionId equals attendance.SessionId
+                         join timeSlot in context.TimeSlots
+                         on session.TimeSlotId equals timeSlot.TimeSlotId
+                         join room in context.Rooms
+                         on session.RoomId equals room.RoomId
+                         join groups in context.Groups
+                         on session.GroupId equals groups.GroupId
+                         join teacher in context.Teachers
+                         on session.TeacherId equals teacher.TeacherId
+                         join course in context.Courses
+                         on groups.CourseId equals course.CourseId
+                         where attendance.AttendanceId == id
+                         select new AttandanceDto
+                         {
+                             SessionId = session.SessionId,
+                             AttendanceId = attendance.AttendanceId,
+                             Date = session.Date,
+                             Index = session.Index,
+                             RoomName = room.RoomName,
+                             Attanded = session.Attanded,
+                             TeacherName = teacher.UserName,
+                             TimeSlot = new TimeSlot { TimeSlotId = timeSlot.TimeSlotId, Description = timeSlot.Description },
+                             Group = new Group { GroupName = groups.GroupName, GroupId = groups.GroupId } ,
+                             Course = new Course { CourseId = course.CourseId, CourseCode = course.CourseCode, CourseName = course.CourseName },
+                             Present = attendance.Present
+                         }).FirstOrDefault();
+            return query;
         }
 
         public List<AttandanceDto> GetAttandancesBySlotIdAndGroupId(int slotId, int groupId)
@@ -36,6 +64,8 @@ namespace StudentAttandanceLibrary.Repositories.Implements
                          on session.GroupId equals groups.GroupId
                          join teacher in context.Teachers
                          on session.TeacherId equals teacher.TeacherId
+                         join course in context.Courses
+                         on groups.CourseId equals course.CourseId
                          where attendance.StudentId == studentId && session.Date >= startDate && session.Date <= endDate
                          select new AttandanceDto
                          {
@@ -43,10 +73,12 @@ namespace StudentAttandanceLibrary.Repositories.Implements
                              AttendanceId = attendance.AttendanceId,
                              Date = session.Date,
                              Index = session.Index,
+                             RoomName = room.RoomName,
                              Attanded = session.Attanded,
                              TeacherName = teacher.UserName,
                              TimeSlot = new TimeSlot { TimeSlotId = timeSlot.TimeSlotId, Description = timeSlot.Description },
-                             GroupName = groups.GroupName,
+                             Group = new Group { GroupName = groups.GroupName, GroupId = groups.GroupId },
+                             Course = new Course { CourseId = course.CourseId, CourseCode = course.CourseCode, CourseName = course.CourseName },
                              Present = attendance.Present
                          }).ToList();
             return query;
