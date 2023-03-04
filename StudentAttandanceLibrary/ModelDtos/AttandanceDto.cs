@@ -10,7 +10,7 @@ namespace StudentAttandanceLibrary.ModelDtos
     public class AttandanceDto
     {
         public int AttendanceId { get; set; }
-        public string StudentId { get; set; } = null!;
+        public Student Student { get; set; } = null!;
         public bool Present { get; set; }
         public string? Description { get; set; }
         public int SessionId { get; set; }
