@@ -13,13 +13,13 @@
         var acc = JsonConvert.DeserializeObject<Account>(account.ToString());
         <div class="row bg-light p-3">
             <div class="col-md-4 d-flex justify-content-start">
-                <h6><a class="text-decoration-none" href="">Home</a><span> | View Schedule</span></h6>
+                <h6><a class="text-decoration-none" href="/home">Home</a><span> | View Schedule</span></h6>
             </div>
             <div class="col-md-8 d-flex justify-content-end">
-                <a class="text-decoration-none" href="#">
+                <a class="text-decoration-none" href="/profile">
                     <span class="private-information text-light p-1 rounded-2">@(acc.AccountId)</span>
                 </a> &nbsp;|&nbsp;
-                <a class="text-decoration-none" href="#">
+                <a class="text-decoration-none" href="/login">
                     <span class="private-information text-light p-1 rounded-2">logout</span>
                 </a> &nbsp;|&nbsp;
                 <a class="text-decoration-none">
@@ -95,7 +95,7 @@
                                         {
                                             check = true;
                                             <p>
-                                                <a href="#">@session.GroupName</a><br>
+                                                <a href="/activityDetails?attendanceId=@session.AttendanceId">@session.Course.CourseCode</a><br>
                                                 at @session.RoomName<br>
                                                 (
                                                 @if (!session.Attanded ?? true)
@@ -106,11 +106,11 @@
                                                 {
                                                     if (session.Present)
                                                     {
-                                                        <font color="Green">attended</font>
+                                                        <font color="Green">Attended</font>
                                                     }
                                                     else
                                                     {
-                                                        <font color="Red">absent</font>
+                                                        <font color="Red">Absent</font>
                                                     }
                                                 }
                                                 )<br>
