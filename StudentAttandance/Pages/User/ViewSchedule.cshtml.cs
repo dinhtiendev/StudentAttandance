@@ -30,7 +30,7 @@ namespace StudentAttandance.Pages.User
                 List<List<DateTime>> listWeeks = getWeeks(year);
                 if (acc.RoleId == 2)
                 {
-
+                    listAttandance = attandanceRepository.GetAttandancesByWeekAndTeacherId(listWeeks[week][0], listWeeks[week][6], acc.AccountId);
                 } else if (acc.RoleId == 3)
                 {
                     listAttandance = attandanceRepository.GetAttandancesByWeekAndStudentId(listWeeks[week][0], listWeeks[week][6], acc.AccountId);
