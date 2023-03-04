@@ -94,28 +94,63 @@
                                         @if (@getWeeks[week][j].Equals(session.Date) && session.TimeSlot.TimeSlotId == i)
                                         {
                                             check = true;
-                                            <p>
-                                                <a href="/activityDetails?attendanceId=@session.AttendanceId">@session.Course.CourseCode</a><br>
-                                                at @session.RoomName<br>
-                                                (
-                                                @if (!session.Attanded ?? true)
-                                                {
-                                                    <font color="red">Not yet</font>
-                                                }
-                                                else
-                                                {
-                                                    if (session.Present)
+                                            if (acc.RoleId == 3)
+                                            {
+                                                <p>
+                                                    <a href="/activityDetails?attendanceId=@session.AttendanceId">@session.Course.CourseCode</a><br>
+                                                    at @session.RoomName<br>
+                                                    (
+                                                    @if (!session.Attanded ?? true)
                                                     {
-                                                        <font color="Green">Attended</font>
+                                                        <font color="red">Not yet</font>
                                                     }
                                                     else
                                                     {
-                                                        <font color="Red">Absent</font>
+                                                        if (session.Present)
+                                                        {
+                                                            <font color="Green">Attended</font>
+                                                        }
+                                                        else
+                                                        {
+                                                            <font color="Red">Absent</font>
+                                                        }
                                                     }
+                                                    )<br>
+                                                    <span>(@session.TimeSlot.Description)</span><br>
+                                                </p>
+                                            }
+                                            else if (acc.RoleId == 2)
+                                            {
+
+                                                @if (!session.Attanded ?? true)
+                                                {
+                                                    <p>
+                                                        @session.Course.CourseCode<br>
+                                                        at @session.RoomName<br>
+                                                        (
+                                                        <a href="/takeAttendance?slotId=@session.TimeSlot.TimeSlotId&date=@session.Date.ToString("dd/MM/yyyy")&year=@year&week=@week">
+                                                            <font>Take</font>
+                                                        </a>
+                                                        )
+                                                        <br>
+                                                        <span>(@session.TimeSlot.Description)</span><br>
+                                                    </p>
                                                 }
-                                                )<br>
-                                                <span>(@session.TimeSlot.Description)</span><br>
-                                            </p>
+                                                else
+                                                {
+                                                    <p>
+                                                        @session.Course.CourseCode<br>
+                                                        at @session.RoomName<br>
+                                                        (
+                                                        <a href="/takeAttendance?slotId=@session.TimeSlot.TimeSlotId&date=@session.Date.ToString("dd/MM/yyyy")&year=@year&week=@week">
+                                                            <font color="Green">Edit</font>
+                                                        </a>
+                                                        )
+                                                        <br>
+                                                        <span>(@session.TimeSlot.Description)</span><br>
+                                                    </p>
+                                                }
+                                            }
                                         }
                                     @if (!check)
                                     {

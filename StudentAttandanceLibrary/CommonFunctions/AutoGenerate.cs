@@ -112,5 +112,39 @@ namespace StudentAttandanceLibrary.CommonFunctions
             }
             return count;
         }
+
+        public List<List<DateTime>> GetWeeks(int year)
+        {
+            var weeks = new List<List<DateTime>>();
+            DateTime startOfYear = new DateTime(year, 1, 1);
+            DateTime endOfYear = startOfYear.AddYears(1).AddDays(-1);
+
+            DateTime startDate = startOfYear;
+            while (startDate.DayOfWeek != DayOfWeek.Monday)
+            {
+                startDate = startDate.AddDays(1);
+            }
+
+            DateTime endDate = endOfYear;
+            while (endDate.DayOfWeek != DayOfWeek.Sunday)
+            {
+                endDate = endDate.AddDays(1);
+            }
+
+            DateTime weekStartDate = startDate;
+            while (weekStartDate <= endDate)
+            {
+                var week = new List<DateTime>();
+                weeks.Add(week);
+                int i = 1;
+                while (i <= 7)
+                {
+                    week.Add(weekStartDate);
+                    weekStartDate = weekStartDate.AddDays(1);
+                    i++;
+                }
+            }
+            return weeks;
+        }
     }
 }
