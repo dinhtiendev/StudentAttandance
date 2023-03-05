@@ -13,13 +13,13 @@
         var acc = JsonConvert.DeserializeObject<Account>(account.ToString());
         <div class="row bg-light p-3">
             <div class="col-md-4 d-flex justify-content-start">
-                <h6><a class="text-decoration-none" href="">Home</a><span> | View Schedule</span></h6>
+                <h6><a class="text-decoration-none" href="/home">Home</a><span> | View Schedule</span></h6>
             </div>
             <div class="col-md-8 d-flex justify-content-end">
-                <a class="text-decoration-none" href="#">
+                <a class="text-decoration-none" href="/profile">
                     <span class="private-information text-light p-1 rounded-2">@(acc.AccountId)</span>
                 </a> &nbsp;|&nbsp;
-                <a class="text-decoration-none" href="#">
+                <a class="text-decoration-none" href="/login">
                     <span class="private-information text-light p-1 rounded-2">logout</span>
                 </a> &nbsp;|&nbsp;
                 <a class="text-decoration-none">
@@ -94,12 +94,63 @@
                                         @if (@getWeeks[week][j].Equals(session.Date) && session.TimeSlot.TimeSlotId == i)
                                         {
                                             check = true;
-                                            <p>
-                                                <a href="#">PRM392</a><br>
-                                                at BE-401<br>
-                                                (<font color="red">Not yet</font>)<br>
-                                                <span>(7:30-9:50)</span><br>
-                                            </p>
+                                            if (acc.RoleId == 3)
+                                            {
+                                                <p>
+                                                    <a href="/activityDetails?attendanceId=@session.AttendanceId">@session.Course.CourseCode</a><br>
+                                                    at @session.RoomName<br>
+                                                    (
+                                                    @if (!session.Attanded ?? true)
+                                                    {
+                                                        <font color="red">Not yet</font>
+                                                    }
+                                                    else
+                                                    {
+                                                        if (session.Present)
+                                                        {
+                                                            <font color="Green">Attended</font>
+                                                        }
+                                                        else
+                                                        {
+                                                            <font color="Red">Absent</font>
+                                                        }
+                                                    }
+                                                    )<br>
+                                                    <span>(@session.TimeSlot.Description)</span><br>
+                                                </p>
+                                            }
+                                            else if (acc.RoleId == 2)
+                                            {
+
+                                                @if (!session.Attanded ?? true)
+                                                {
+                                                    <p>
+                                                        @session.Course.CourseCode<br>
+                                                        at @session.RoomName<br>
+                                                        (
+                                                        <a href="/takeAttendance?slotId=@session.TimeSlot.TimeSlotId&date=@session.Date.ToString("dd/MM/yyyy")&year=@year&week=@week">
+                                                            <font>Take</font>
+                                                        </a>
+                                                        )
+                                                        <br>
+                                                        <span>(@session.TimeSlot.Description)</span><br>
+                                                    </p>
+                                                }
+                                                else
+                                                {
+                                                    <p>
+                                                        @session.Course.CourseCode<br>
+                                                        at @session.RoomName<br>
+                                                        (
+                                                        <a href="/takeAttendance?slotId=@session.TimeSlot.TimeSlotId&date=@session.Date.ToString("dd/MM/yyyy")&year=@year&week=@week">
+                                                            <font color="Green">Edit</font>
+                                                        </a>
+                                                        )
+                                                        <br>
+                                                        <span>(@session.TimeSlot.Description)</span><br>
+                                                    </p>
+                                                }
+                                            }
                                         }
                                     @if (!check)
                                     {
@@ -114,19 +165,3 @@
         </div>
     }
 }
-@*<td>
-    <p>
-        <a href="#">PRM392</a><br>
-        at BE-401<br>
-        (<font color="Green">attended</font>)<br>
-        <span>(7:30-9:50)</span><br>
-    </p>
-</td>
-<td>
-    <p>
-        <a href="#">ENW492c</a><br>
-        at Phòng tự học 14 <br>
-        (<font color="Red">absent</font>)<br>
-        <span>(7:30-9:50)</span><br>
-    </p>
-</td>*@

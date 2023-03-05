@@ -1,0 +1,81 @@
+﻿@page "/activityDetails"
+@using Newtonsoft.Json
+@using StudentAttandanceLibrary.Models
+@model StudentAttandance.Pages.User.ActivityDetailsModel
+@{
+    ViewData["Title"] = "Activity Details";
+    var account = HttpContext.Session.GetString("Account");
+    if (account != null)
+    {
+        var acc = JsonConvert.DeserializeObject<Account>(account.ToString());
+        <div class="row bg-light p-3">
+            <div class="col-md-4 d-flex justify-content-start">
+                <h6><a class="text-decoration-none" href="/home">Home</a><span> | View Schedule</span></h6>
+            </div>
+            <div class="col-md-8 d-flex justify-content-end">
+                <a class="text-decoration-none" href="/profile">
+                    <span class="private-information text-light p-1 rounded-2">@(acc.AccountId)</span>
+                </a> &nbsp;|&nbsp;
+                <a class="text-decoration-none" href="/login">
+                    <span class="private-information text-light p-1 rounded-2">logout</span>
+                </a> &nbsp;|&nbsp;
+                <a class="text-decoration-none">
+                    <span class="private-information text-light p-1 rounded-2">
+                        CAMPUS:
+                        FPTU-Hòa Lạc
+                    </span>
+                </a>
+            </div>
+        </div>
+        <p style="font-size: 30px;" class="p-3 my-3">Activity details</p>
+        <div class="row my-12">
+            <div id="ctl00_mainContent_divContent">
+                <table>
+                    <tbody>
+                        <tr align="left">
+                            <td>Date:</td>
+                            <td>@Model.Attandance.Date.DayOfWeek @Model.Attandance.Date.ToString("dd/MM/yyyy")</td>
+                        </tr>
+                        <tr align="left">
+                            <td>Slot:</td>
+                            <td>@Model.Attandance.TimeSlot.TimeSlotId</td>
+                        </tr>
+                        <tr align="left">
+                            <td>Student group</td>
+                            <td><a href="#">@Model.Attandance.Group.GroupName</a></td>
+                        </tr>
+                        <tr align="left">
+                            <td>Instructor:</td>
+                            <td>@Model.Attandance.TeacherName</td>
+                        </tr>
+                        <tr align="left">
+                            <td>Course:</td>
+                            <td>@Model.Attandance.Course.CourseName (@Model.Attandance.Course.CourseCode)</td>
+                        </tr>
+                        <tr align="left">
+                            <td>Campus/Programme:</td>
+                            <td>FU-HL</td>
+                        </tr>
+                        <tr align="left">
+                            <td>Attendance:</td>
+                            @if(!@Model.Attandance.Attanded ?? true)
+                            {
+                                <td>Not yet</td>
+                            } else
+                            {
+                                if (@Model.Attandance.Present)
+                                {
+                                    <td>Attended</td>
+                                } else
+                                {
+                                    <td>Absent</td>
+                                }
+                            }
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+}
+

@@ -1,0 +1,109 @@
+﻿@page "/takeAttendance"
+@using Newtonsoft.Json
+@using StudentAttandanceLibrary.Models
+@model StudentAttandance.Pages.User.TakeAttendanceModel
+@{
+    ViewData["Title"] = "Activity Details";
+    var account = HttpContext.Session.GetString("Account");
+
+    if (account != null)
+    {
+        var year = (int)ViewData["Year"];
+        var week = (int)ViewData["Week"];
+        var acc = JsonConvert.DeserializeObject<Account>(account.ToString());
+        <div class="row bg-light p-3">
+            <div class="col-md-4 d-flex justify-content-start">
+                <h6><a class="text-decoration-none" href="/home">Home</a><span> | View Schedule</span></h6>
+            </div>
+            <div class="col-md-8 d-flex justify-content-end">
+                <a class="text-decoration-none" href="/profile">
+                    <span class="private-information text-light p-1 rounded-2">@acc.AccountId</span>
+                </a> &nbsp;|&nbsp;
+                <a class="text-decoration-none" href="/login">
+                    <span class="private-information text-light p-1 rounded-2">logout</span>
+                </a> &nbsp;|&nbsp;
+                <a class="text-decoration-none">
+                    <span class="private-information text-light p-1 rounded-2">
+                        CAMPUS:
+                        FPTU-Hòa Lạc
+                    </span>
+                </a>
+            </div>
+        </div>
+        <p style="font-size: 30px;" class="p-3 my-3">Single Activity Attendance</p>
+        <p style="font-size: 15px;" class="p-3 my-3">
+            Attendance for <span><b>@Model.Attandances[0].Course.CourseCode</b></span> with lecture
+            <span><b>@acc.AccountId</b></span>
+        </p>
+        <form method="post">
+            <input value="@year" name="Year" hidden />
+            <input value="@week" name="Week" hidden />
+            <input value="@Model.Attandances.Count" name="Count" hidden />
+            <input value="@Model.Attandances[0].SessionId" name="SessionId" hidden />
+            <div class="row my-3">
+                <table class="table table-bordered">
+                    <thead style="background-color: #6b90da;">
+                        <tr class="align-middle">
+                            <th class="fw-normal">NO</th>
+                            <th class="fw-normal">GROUP</th>
+                            <th class="fw-normal">CODE</th>
+                            <th class="fw-normal">NAME</th>
+                            <th class="fw-normal">PRESENT</th>
+                            <th class="fw-normal">ABSENT</th>
+                            <th class="fw-normal">DESCRIPTION</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (!Model.Attandances[0].Attanded ?? true)
+                        {
+                            @for (int i = 0; i < Model.Attandances.Count; i++)
+                            {
+                                <input value="@Model.Attandances[i].AttendanceId" name="Id @i" hidden />
+                                <tr>
+                                    <td>@(i + 1)</td>
+                                    <td>@Model.Attandances[i].Group.GroupName</td>
+                                    <td>@Model.Attandances[i].Student.StudentId</td>
+                                    <td>@Model.Attandances[i].Student.FullName</td>
+                                    <td>
+                                        <input type="radio" name="Attamdance @i" value="true" checked="checked"> <span style="color: green;">Present</span>
+                                    </td>
+                                    <td>
+                                        <input type="radio" name="Attamdance @i" value="false" /> <span style="color: red;">Absent</span>
+                                    </td>
+                                    <td>
+                                        <input type="text" name="description">
+                                    </td>
+                                </tr>
+                            }
+                        } else
+                        {
+                            @for (int i = 0; i < Model.Attandances.Count; i++)
+                            {
+                                <input value="@Model.Attandances[i].AttendanceId" name="Id @i" hidden />
+                                <tr>
+                                    <td>@(i + 1)</td>
+                                    <td>@Model.Attandances[i].Group.GroupName</td>
+                                    <td>@Model.Attandances[i].Student.StudentId</td>
+                                    <td>@Model.Attandances[i].Student.FullName</td>
+                                    <td>
+                                        <input type="radio" name="Attamdance @i" value="true" checked="@Model.Attandances[i].Present" /> <span style="color: green;">Present</span>
+                                    </td>
+                                    <td>
+                                        <input type="radio" name="Attamdance @i" value="false" checked="@(!Model.Attandances[i].Present)" /> <span style="color: red;">Absent</span>
+                                    </td>
+                                    <td>
+                                        <input type="text" name="description">
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+                
+            </div>
+            <div class="text-center">
+                <button type="submit">Submit</button>
+            </div>
+        </form>
+    }
+}
