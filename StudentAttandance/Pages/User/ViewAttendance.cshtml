@@ -1,13 +1,16 @@
-@page "/student/viewattendance"
+@page "/viewattendance"
 @using Newtonsoft.Json
+@using StudentAttandanceLibrary.ModelDtos
 @using StudentAttandanceLibrary.Models
 @model StudentAttandance.Pages.User.ViewAttendanceModel
 @{
-     var account = HttpContext.Session.GetString("Account");
+    int currentTerm = (int)ViewBag.CurrentTermId;
+    int currentCourse = (int)ViewBag.CurrentCourseId;
+    var account = HttpContext.Session.GetString("Account");
 }
 <div class="row bg-light p-3">
     <div class="col-md-4 d-flex justify-content-start">
-        <h6><a class="text-decoration-none" href="">Home</a><span> | View Schedule</span></h6>
+        <h6><a class="text-decoration-none" asp-page="home">Home</a><span> | View Schedule</span></h6>
     </div>
     <div class="col-md-8 d-flex justify-content-end">
         <a class="text-decoration-none" href="#">
@@ -27,7 +30,7 @@
 <p style="font-size: 30px;" class="p-3 my-3">View attendance for Nguyễn Tiến Đạt (DatNTHE153704)</p>
 <p style="font-size: 25px;" class="p-3 my-3">Select a campus/program, term, course ...</p>
 <div class="row my-3">
-    <div class="col-md-4">
+    <div class="@((currentCourse > -1)?"col-md-4":"col-12")">
         <table class="table table-bordered">
             <thead style="background-color: #6b90da;">
                 <tr>
@@ -50,30 +53,65 @@
                     <td>
                         <table class="second-table table">
                             <tbody>
-                                <tr>
-                                    <td>
-                                        <a class="text-decoration-none" href="">
-                                            Summer2017
-                                        </a>
-                                    </td>
-                                </tr>
+                                @foreach (var term in ViewBag.TermList as List<Term>)
+                                {
+                                    <tr>
+                                        <td>
+                                            @if (@term.TermId == @currentTerm)
+                                            {
+                                                <p>
+                                                    @term.TermName
+                                                </p>
+                                            }
+                                            else
+                                            {
+                                                <a class="text-decoration-none" asp-page="/User/ViewAttendance"
+                                           asp-route-termId="@term.TermId" asp-route-courseId="0">
+                                                    @term.TermName
+                                                </a>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
                             </tbody>
                         </table>
                     </td>
                     <td>
                         <table class="third-table table">
                             <tbody>
-                                <tr>
-                                    <td>
-                                        <a class="text-decoration-none" href="">
-                                            OOP with Java
-                                            Lab(LAB211)
-                                        </a><span>
-                                            (SE1606,start
-                                            06/09/2021)
-                                        </span>
-                                    </td>
-                                </tr>
+                                @if (currentCourse != -1)
+                                {
+                                    @foreach (var course in ViewBag.CourseList as List<CourseDto>)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @if (@course.CourseId == @currentCourse)
+                                                {
+                                                    <p>
+                                                        @course.CourseName (@course.CourseCode)
+                                                    </p>
+
+                                                    <span>
+                                                        (@course.GroupName, Start
+                                                        @course.StartDate.ToString("dd/MM/yyyy"))
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <a class="text-decoration-none" asp-page="/User/ViewAttendance"
+                                           asp-route-termId="@currentTerm" asp-route-courseId="@course.CourseId">
+                                                        @course.CourseName (@course.CourseCode)
+                                                    </a>
+
+                                                    <span>
+                                                        (@course.GroupName, Start
+                                                        @course.StartDate.ToString("dd/MM/yyyy"))
+                                                    </span>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                }
                             </tbody>
                         </table>
                     </td>
@@ -81,93 +119,94 @@
             </tbody>
         </table>
     </div>
-    <div class="col-md-8">
-        <table class="table table-bordered">
-            <thead style="background-color: #6b90da;">
-                <tr class="align-middle">
-                    <th class="fw-normal ">NO</th>
-                    <th class="fw-normal">DATE</th>
-                    <th class="fw-normal">SLOT</th>
-                    <th class="fw-normal">ROOM</th>
-                    <th class="fw-normal">LECTURER</th>
-                    <th class="fw-normal">GROUP NAME</th>
-                    <th class="fw-normal">ATTEDANCE STATUS</th>
-                    <th class="fw-normal">LECTURER'S COMMENT</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>
-                        <p style="font-size: 12px; color: white; font-weight: bold; width: 150px;"
-                           class="p-1 text-center bg-primary border border-light border-3 rounded-3">
-                            Monday
-                            06/09/2021
-                        </p>
-                    </td>
-                    <td>
-                        <p style="font-size: 12px; color: white; font-weight: bold; width: 150px;"
-                           class="p-1 text-center bg-danger border border-light border-3 rounded-3">
-                            3_(10:50-12:20)
-                        </p>
-                    </td>
-                    <td>BE-220</td>
-                    <td>HanhVB</td>
-                    <td>SE1606</td>
-                    <td>
-                        <p style="color: green;">Present</p>
-                    </td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>
-                        <p style="font-size: 12px; color: white; font-weight: bold; width: 150px;"
-                           class="p-1 text-center bg-primary border border-light border-3 rounded-3">
-                            Monday
-                            06/09/2021
-                        </p>
-                    </td>
-                    <td>
-                        <p style="font-size: 12px; color: white; font-weight: bold; width: 150px;"
-                           class="p-1 text-center bg-danger border border-light border-3 rounded-3">
-                            3_(10:50-12:20)
-                        </p>
-                    </td>
-                    <td>BE-220</td>
-                    <td>HanhVB</td>
-                    <td>SE1606</td>
-                    <td>
-                        <p style="color: red;">Present</p>
-                    </td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>
-                        <p style="font-size: 12px; color: white; font-weight: bold; width: 150px;"
-                           class="p-1 text-center bg-primary border border-light border-3 rounded-3">
-                            Monday
-                            06/09/2021
-                        </p>
-                    </td>
-                    <td>
-                        <p style="font-size: 12px; color: white; font-weight: bold; width: 150px;"
-                           class="p-1 text-center bg-danger border border-light border-3 rounded-3">
-                            3_(10:50-12:20)
-                        </p>
-                    </td>
-                    <td>BE-220</td>
-                    <td>HanhVB</td>
-                    <td>SE1606</td>
-                    <td>
-                        <p>Present</p>
-                    </td>
-                    <td></td>
-                </tr>
+    @if (currentCourse != -1)
+    {
+        <div class="col-md-8">
+            <table class="table table-bordered">
+                <thead style="background-color: #6b90da;">
+                    <tr class="align-middle">
+                        <th class="fw-normal ">NO</th>
+                        <th class="fw-normal">DATE</th>
+                        <th class="fw-normal">SLOT</th>
+                        <th class="fw-normal">ROOM</th>
+                        <th class="fw-normal">LECTURER</th>
+                        <th class="fw-normal">GROUP NAME</th>
+                        <th class="fw-normal">ATTEDANCE STATUS</th>
+                        <th class="fw-normal">LECTURER'S COMMENT</th>
+                    </tr>
+                </thead>
+                <tbody>
 
-            </tbody>
-        </table>
-        <h6 class="p-2">ABSENT: 0% ABSENT SO FAR (0 ABSENT ON 30 TOTAL).</h6>
-    </div>
+                    @{
+                        int index = 0;
+                    }
+                    @foreach (var session in ViewBag.SessionList as List<SessionDto>)
+                    {
+                        index++;
+                        <tr>
+                            <td>@index</td>
+                            <td>
+                                <p style="font-size: 12px; color: white; font-weight: bold; width: 150px;"
+                           class="p-1 text-center bg-primary border border-light border-3 rounded-3">
+                                    @session.DayOfWeek
+                                    @session.Date.ToString("dd/MM/yyyy")
+                                </p>
+                            </td>
+                            <td>
+                                <p style="font-size: 12px; color: white; font-weight: bold; width: 150px;"
+                           class="p-1 text-center bg-danger border border-light border-3 rounded-3">
+                                    3_(10:50-12:20)
+                                    @session.TimeSlotId _( @session.Description )
+                                </p>
+                            </td>
+                            <td>@session.RoomName</td>
+                            <td>@session.TeacherId</td>
+                            <td>@session.GroupName</td>
+                            <td>
+                                @if (@session.Attanded == false)
+                                {
+                                    <p>Future</p>
+                                }
+                                else
+                                {
+                                    @foreach (var attendance in ViewBag.AttendanceList as List<AttendanceDto>)
+                                    {
+                                        @if (attendance.SessionId == session.SessionId && attendance.Date == session.Date)
+                                        {
+                                            @if (attendance.Present == false)
+                                            {
+                                                <p style="color: red;">Absent</p>
+                                            }
+                                            else
+                                            {
+                                                <p style="color: green;">Present</p>
+                                            }
+                                        }
+                                    }
+                                }
+                            </td>
+                            <td>
+                                @if (@session.Attanded == true)
+                                {
+                                    @foreach (var attendance in ViewBag.AttendanceList as List<AttendanceDto>)
+                                    {
+                                        @if (attendance.SessionId == session.SessionId && attendance.Date == session.Date)
+                                        {
+                                            <p>@attendance.Description</p>
+                                        }
+                                    }
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            @{
+                var numberSession = (ViewBag.SessionList as List<SessionDto>).Count;
+                var numberAbsent = (int)ViewBag.NumberAbsent;
+                var totalAbsent = (int)ViewBag.TotalAbsent;
+            }
+            <h6 class="p-2">ABSENT: @totalAbsent % ABSENT SO FAR (@numberAbsent ABSENT ON @numberSession TOTAL).</h6>
+        </div>
+    }
 </div>
