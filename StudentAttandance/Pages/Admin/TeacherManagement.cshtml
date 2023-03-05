@@ -1,4 +1,4 @@
-﻿@page "/teacherManagement"
+﻿@page "/teachermanagement"
 @using StudentAttandanceLibrary.ModelDtos
 @using Newtonsoft.Json
 @using StudentAttandanceLibrary.Models
@@ -8,7 +8,7 @@
 }
 <div class="row bg-light p-3">
     <div class="col-md-4 d-flex justify-content-start">
-        <h6><a class="text-decoration-none" asp-page="home">Home</a><span> | Teacher List</span></h6>
+        <h6><a class="text-decoration-none" href="/home">Home</a><span> | Teacher List</span></h6>
     </div>
     <div class="col-md-8 d-flex justify-content-end">
         <a class="text-decoration-none" href="#">
@@ -35,9 +35,9 @@
                 <div class="mb-3">
                     <div class="row">
                         <span asp-validation-for="ExcelFile" class="text-danger"></span>
-                         @if (ViewData["Message"] != null)
+                        @if (ViewData["Message"] != null)
                         {
-                             <span class="text-danger">@ViewData["Message"]</span>
+                            <span class="text-danger">@ViewData["Message"]</span>
                         }
                         <div class="col-md-8">
                             <input class="form-control" type="file" id="formFile" asp-for="ExcelFile">

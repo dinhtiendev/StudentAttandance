@@ -36,7 +36,7 @@
             <div class="col-md-7 border border-light border-3 rounded-3">
                 <p class="p-2 my-4"><a class="text-decoration-none" href="#">Academic Information</a>&nbsp;(Thông tin lịch học)</p>
                 <p class="p-2 my-4"><a class="text-decoration-none" href="#">Weekly timetable</a>&nbsp;(Thời khóa biểu từng tuần)</p>
-                <p class="p-2 my-4"><a class="text-decoration-none" href="#">Attendance report</a>&nbsp;(Báo cáo điểm danh)</p>
+                <p class="p-2 my-4"><a class="text-decoration-none" asp-page="viewattendance">Attendance report</a>&nbsp;(Báo cáo điểm danh)</p>
             </div>
             <div class="col-md-1"></div>
             @if (account != null)
@@ -44,11 +44,11 @@
                 if (acc.RoleId == 1)
                 {
                     <div class="col-md-4 border border-light border-3 rounded-3">
-                        <p class="p-2 my-4"><a class="text-decoration-none" href="/studentManagement">Management Students</p>
-                        <p class="p-2 my-4"><a class="text-decoration-none" href="/teacherManagement">Management Teachers</p>
-                        <p class="p-2 my-4"><a class="text-decoration-none" href="#">Management Term</p>
-                        <p class="p-2 my-4"><a class="text-decoration-none" href="#">Management Group</p>
-                        <p class="p-2 my-4"><a class="text-decoration-none" href="#">Management Course</p>
+                        <p class="p-2 my-4"><a class="text-decoration-none" href="/studentmanagement">Management Students</a></p>
+                        <p class="p-2 my-4"><a class="text-decoration-none" href="/teachermanagement">Management Teachers</a></p>
+                        <p class="p-2 my-4"><a class="text-decoration-none" href="#">Management Term</a></p>
+                        <p class="p-2 my-4"><a class="text-decoration-none" href="#">Management Group</a></p>
+                        <p class="p-2 my-4"><a class="text-decoration-none" href="#">Management Course</a></p>
                     </div>
                 }
             }
