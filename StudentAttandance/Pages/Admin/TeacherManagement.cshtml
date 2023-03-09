@@ -109,8 +109,14 @@
                         </td>
                         <td>
                             <p class="text-center">
-                                <a class="btn btn-danger text-decoration-none" asp-page-handler="Delete" asp-route-id="@teacher.TeacherId">Delete</a>
-                                <a class="btn btn-primary text-decoration-none" asp-page-handler="Update">Update</a>
+                                @if (@teacher.Status == true)
+                                {
+                                    <a class="btn btn-danger text-decoration-none" asp-page-handler="Delete" asp-route-id="@teacher.TeacherId">Delete</a>
+                                }
+                                else
+                                {
+                                    <a class="btn btn-primary text-decoration-none" asp-page-handler="Restore" asp-route-id="@teacher.TeacherId">Restore</a>
+                                }
                             </p>
                         </td>
                     </tr>

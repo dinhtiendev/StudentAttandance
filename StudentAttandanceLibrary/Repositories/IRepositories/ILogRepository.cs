@@ -13,6 +13,7 @@ namespace StudentAttandanceLibrary.Repositories.IRepositories
         public bool ConfirmEmail(string email);
         public bool ChangePassword(string email, string newPassword);
         public bool ChangePassword(string email, string oldPassword, string newPassword);
+        public IQueryable<object> GetUserInformation(int? roleId);
         public void Logout();
     }
 }

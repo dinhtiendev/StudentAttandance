@@ -7,6 +7,7 @@
     int currentTerm = (int)ViewBag.CurrentTermId;
     int currentCourse = (int)ViewBag.CurrentCourseId;
     var account = HttpContext.Session.GetString("Account");
+    var student = ViewBag.Student as Student;
 }
 <div class="row bg-light p-3">
     <div class="col-md-4 d-flex justify-content-start">
@@ -27,7 +28,7 @@
         </a>
     </div>
 </div>
-<p style="font-size: 30px;" class="p-3 my-3">View attendance for Nguyễn Tiến Đạt (DatNTHE153704)</p>
+<p style="font-size: 30px;" class="p-3 my-3">View attendance for @student.FullName (@student.UserName)</p>
 <p style="font-size: 25px;" class="p-3 my-3">Select a campus/program, term, course ...</p>
 <div class="row my-3">
     <div class="@((currentCourse > -1)?"col-md-4":"col-12")">

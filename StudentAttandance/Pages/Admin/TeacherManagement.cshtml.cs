@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Newtonsoft.Json;
 using StudentAttandanceLibrary.CommonFunctions;
 using StudentAttandanceLibrary.Models;
 using StudentAttandanceLibrary.Repositories.IRepositories;
@@ -28,10 +29,19 @@ namespace StudentAttandance.Pages.Admin
 
         public IActionResult OnGet(string message)
         {
-            ViewData["Message"] = message;
-            ViewData["TeacherList"] = _teacherRepository.GetAllTeachers().ToList();
-            ViewData["TotalTeachers"] = _teacherRepository.GetAllTeachers().ToList().Count();
-            return Page();
+            if (HttpContext.Session.GetString("Account") != null)
+            {
+                var account = JsonConvert.DeserializeObject<Account>(HttpContext.Session.GetString("Account"));
+
+                if (account.RoleId == 1)
+                {
+                    ViewData["Message"] = message;
+                    ViewData["TeacherList"] = _teacherRepository.GetAllTeachers().ToList();
+                    ViewData["TotalTeachers"] = _teacherRepository.GetAllTeachers().ToList().Count();
+                    return Page();
+                }
+            }
+            return RedirectToPage("/error");
         }
 
         public IActionResult OnPostAdd()
@@ -100,8 +110,9 @@ namespace StudentAttandance.Pages.Admin
             return RedirectToPage();
         }
 
-        public IActionResult OnGetUpdate()
+        public IActionResult OnGetRestore(string id)
         {
+            _teacherRepository.RestoreTeacher(id);
             return RedirectToPage();
         }
     }

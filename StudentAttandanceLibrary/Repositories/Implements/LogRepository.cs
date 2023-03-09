@@ -50,6 +50,54 @@ namespace StudentAttandanceLibrary.Repositories.Implements
             return context.Accounts.Any(a => a.Email == email);
         }
 
+        public IQueryable<object> GetUserInformation(int? roleId)
+        {
+            if (roleId == 1)
+            {
+                var query1 = from a in context.Accounts
+                            join u in context.Admins
+                            on a.AccountId equals u.AdminId
+                            select new Admin
+                            {
+                                AdminId = u.AdminId,
+                                UserName = u.UserName,
+                                FullName = u.FullName,
+                                Image = u.Image,
+                            };
+                return query1;
+            }
+            if (roleId == 2)
+            {
+                var query2 = from a in context.Accounts
+                            join u in context.Teachers
+                            on a.AccountId equals u.TeacherId
+                            select new Teacher
+                            {
+                                TeacherId = u.TeacherId,
+                                Image = u.Image,
+                                Gender = u.Gender,
+                                FullName = u.FullName,
+                                Dob = u.Dob,
+                                UserName = u.UserName,
+                            };
+                return query2;
+            }
+            var query3 = from a in context.Accounts
+                        join u in context.Students
+                        on a.AccountId equals u.StudentId
+                        select new Student
+                        {
+                            StudentId = u.StudentId,
+                            FullName = u.FullName,
+                            UserName = u.UserName,
+                            Dob = u.Dob,
+                            Address = u.Address,
+                            Gender = u.Gender,
+                            Image = u.Image,
+                        };
+            return query3;
+        }
+
         public Account? Login(string email, string password)
         {
             return context.Accounts.FirstOrDefault(
