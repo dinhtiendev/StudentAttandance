@@ -49,9 +49,11 @@ namespace StudentAttandanceLibrary.Repositories.Implements
             return query;
         }
 
-        public void UpdateStudent(StudentDto student)
+        public void RestoreStudent(string id)
         {
-            throw new NotImplementedException();
+            var account = context.Accounts.Where(x => x.AccountId.Equals(id)).FirstOrDefault();
+            account.Status = true;
+            context.SaveChanges();
         }
 
         public IQueryable<StudentDto> GetAllStudents()
@@ -59,7 +61,7 @@ namespace StudentAttandanceLibrary.Repositories.Implements
             var query = from student in context.Students
                         join account in context.Accounts
                         on student.StudentId equals account.AccountId
-                        where account.Status == true
+                        //where account.Status == true
                         select new StudentDto
                         {
                             StudentId = student.StudentId,

@@ -8,7 +8,7 @@ namespace StudentAttandanceLibrary.Repositories.IRepositories
         public TeacherDto GetTeacherById(String id);
         public TeacherDto? GetTeacherByEmail(String email);
         public void AddTeacher(List<Account> listA, List<Teacher> listT);
-        public void UpdateTeacher(TeacherDto teacher);
+        public void RestoreTeacher(string id);
         public void DeleteTeacher(string id);
 
         public IQueryable<TeacherDto> GetAllTeachers();

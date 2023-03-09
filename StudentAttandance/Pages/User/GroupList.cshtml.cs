@@ -20,36 +20,40 @@ namespace StudentAttandance.Pages.User
             _courseRepository = courseRepository;
             _termRepository = termRepository;
         }
-        public void OnGet(int termId, int courseId, int groupId)
+        public IActionResult OnGet(int termId, int courseId, int groupId)
         {
-            ViewData["TermList"] = _termRepository.GetAllTerms().ToList();
-            if (termId == 0 || termId > _termRepository.GetAllTerms().Count())
+            if (HttpContext.Session.GetString("Account") != null)
             {
-                termId = _termRepository.GetAllTerms().OrderBy(x => x.TermId).LastOrDefault().TermId;
+                ViewData["TermList"] = _termRepository.GetAllTerms().ToList();
+                if (termId == 0 || termId > _termRepository.GetAllTerms().Count())
+                {
+                    termId = _termRepository.GetAllTerms().OrderBy(x => x.TermId).LastOrDefault().TermId;
+                }
+                ViewData["CurrentTermId"] = termId;
+
+                ViewData["CourseList"] = _courseRepository.GetAllCourses().ToList();
+                if (courseId == 0 || courseId > _courseRepository.GetAllCourses().Count())
+                {
+                    courseId = _courseRepository.GetAllCourses().ToList().OrderBy(x => x.CourseId).FirstOrDefault().CourseId;
+                }
+                ViewData["CurrentCourseId"] = courseId;
+
+                ViewData["GroupList"] = _groupRepository.GetGroupsByTermAndCourse(termId, courseId).ToList();
+                ViewData["CurrentGroupId"] = groupId;
+
+                List<Student> list = _studentRepository.GetStudentsByConditions(termId, courseId, groupId).ToList();
+                if (courseId != 0)
+                {
+                    ViewData["StudentList"] = list;
+                }
+                else
+                {
+                    ViewData["StudentList"] = null;
+                }
+
+                return Page();
             }
-            ViewData["CurrentTermId"] = termId;
-
-            ViewData["CourseList"] = _courseRepository.GetAllCourses().ToList();
-            if (courseId == 0 || courseId > _courseRepository.GetAllCourses().Count())
-            {
-                courseId = _courseRepository.GetAllCourses().ToList().OrderBy(x => x.CourseId).FirstOrDefault().CourseId;
-            }
-            ViewData["CurrentCourseId"] = courseId;
-
-            ViewData["GroupList"] = _groupRepository.GetGroupsByTermAndCourse(termId, courseId).ToList();
-            ViewData["CurrentGroupId"] = groupId;
-
-            List<Student> list = _studentRepository.GetStudentsByConditions(termId, courseId, groupId).ToList();
-            if (courseId != 0)
-            {
-                ViewData["StudentList"] = list;
-            } else
-            {
-                ViewData["StudentList"] = null;
-            }
-
-            //return Page();
-            //return RedirectToPage("/grouplist?id="+termId+"&param1="+courseId);
+            return RedirectToPage("/error");
         }
 
     }

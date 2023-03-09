@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
 using StudentAttandanceLibrary.CommonFunctions;
@@ -12,55 +13,65 @@ namespace StudentAttandance.Pages.User
         private ITermRepository _termRepository;
         private ISessionRepository _sessionRepository;
         private IAttendanceRepository _attendanceRepository;
+        private ILogRepository _logRepository;
 
-        public ViewAttendanceModel(ITermRepository termRepository, ICourseRepository courseRepository, ISessionRepository sessionRepository, IAttendanceRepository attendanceRepository)
+        public ViewAttendanceModel(ITermRepository termRepository, ICourseRepository courseRepository, ISessionRepository sessionRepository, IAttendanceRepository attendanceRepository, ILogRepository logRepository)
         {
             _termRepository = termRepository;
             _courseRepository = courseRepository;
             _sessionRepository = sessionRepository;
             _attendanceRepository = attendanceRepository;
+            _logRepository = logRepository;
         }
 
-        public void OnGet(int termId, int courseId)
+        public IActionResult OnGet(int termId, int courseId)
         {
             if (HttpContext.Session.GetString("Account") != null)
             {
                 var account = JsonConvert.DeserializeObject<Account>(HttpContext.Session.GetString("Account"));
 
-                ViewData["TermList"] = _termRepository.GetAllTerms().ToList();
-                if (termId == 0 || termId > _termRepository.GetAllTerms().Count())
+                if (account.RoleId == 3)
                 {
-                    termId = _termRepository.GetAllTerms().OrderBy(x => x.TermId).LastOrDefault().TermId;
-                }
-                ViewData["CurrentTermId"] = termId;
+                    var student = _logRepository.GetUserInformation(account.RoleId).FirstOrDefault();
+                    ViewData["Student"] = student;
 
-                var courses = _courseRepository.GetCoursesByCondition(account.AccountId, termId).ToList();
-                if (courses.Count > 0)
-                {
-                    ViewData["CourseList"] = courses;
-                    if (courseId == 0)
+                    ViewData["TermList"] = _termRepository.GetAllTerms().ToList();
+                    if (termId == 0 || termId > _termRepository.GetAllTerms().Count())
                     {
-                        courseId = courses.FirstOrDefault().CourseId;
+                        termId = _termRepository.GetAllTerms().OrderBy(x => x.TermId).LastOrDefault().TermId;
                     }
-                    ViewData["CurrentCourseId"] = courseId;
+                    ViewData["CurrentTermId"] = termId;
 
-                    var sessions = _sessionRepository.GetAllSessionsByCondition(account.AccountId, termId, courseId).ToList();
-                    ViewData["SessionList"] = sessions;
+                    var courses = _courseRepository.GetCoursesByCondition(account.AccountId, termId).ToList();
+                    if (courses.Count > 0)
+                    {
+                        ViewData["CourseList"] = courses;
+                        if (courseId == 0)
+                        {
+                            courseId = courses.FirstOrDefault().CourseId;
+                        }
+                        ViewData["CurrentCourseId"] = courseId;
 
-                    var attendances = _attendanceRepository.GetAttendancesByCondition(account.AccountId, termId, courseId).ToList();
-                    ViewData["AttendanceList"] = attendances;
+                        var sessions = _sessionRepository.GetAllSessionsByCondition(account.AccountId, termId, courseId).ToList();
+                        ViewData["SessionList"] = sessions;
 
-                    var numberAbsent = attendances.Where(x => x.Present == false).Count();
-                    ViewData["NumberAbsent"] = numberAbsent;
-                    var totalAbsent = Calculation.NumberAbsent(sessions.Count, numberAbsent);
-                    ViewData["TotalAbsent"] = totalAbsent;
-                }
-                else
-                {
-                    ViewData["CurrentCourseId"] = -1;
-                    ViewData["CourseList"] = null;
+                        var attendances = _attendanceRepository.GetAttendancesByCondition(account.AccountId, termId, courseId).ToList();
+                        ViewData["AttendanceList"] = attendances;
+
+                        var numberAbsent = attendances.Where(x => x.Present == false).Count();
+                        ViewData["NumberAbsent"] = numberAbsent;
+                        var totalAbsent = Calculation.NumberAbsent(sessions.Count, numberAbsent);
+                        ViewData["TotalAbsent"] = totalAbsent;
+                    }
+                    else
+                    {
+                        ViewData["CurrentCourseId"] = -1;
+                        ViewData["CourseList"] = null;
+                    }
+                    return Page();
                 }
             }
+            return RedirectToPage("/error") ;
         }
     }
 }
