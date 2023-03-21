@@ -30,22 +30,22 @@ namespace StudentAttandanceLibrary.Repositories.Implements
         public StudentDto? GetStudentByEmail(string email)
         {
             var query = (from student in context.Students
-                        join account in context.Accounts
-                        on student.StudentId equals account.AccountId
-                        where account.Status == true
-                        select new StudentDto
-                        {
-                            StudentId = student.StudentId,
-                            FullName = student.FullName,
-                            UserName = student.FullName,
-                            Email = account.Email,
-                            Image = student.Image,
-                            Dob = student.Dob,
-                            Gender = student.Gender,
-                            Address = student.Address,
-                            RoleId = account.RoleId,
-                            Status = account.Status,
-                        }).FirstOrDefault();
+                         join account in context.Accounts
+                         on student.StudentId equals account.AccountId
+                         where account.Status == true
+                         select new StudentDto
+                         {
+                             StudentId = student.StudentId,
+                             FullName = student.FullName,
+                             UserName = student.FullName,
+                             Email = account.Email,
+                             Image = student.Image,
+                             Dob = student.Dob,
+                             Gender = student.Gender,
+                             Address = student.Address,
+                             RoleId = account.RoleId,
+                             Status = account.Status,
+                         }).FirstOrDefault();
             return query;
         }
 
@@ -97,7 +97,7 @@ namespace StudentAttandanceLibrary.Repositories.Implements
                         on g.TermId equals termId
                         join c in context.Courses
                         on g.CourseId equals courseId
-                        where t.TermId == termId && c.CourseId == courseId && g.GroupId == groupId 
+                        where t.TermId == termId && c.CourseId == courseId && g.GroupId == groupId
                         && account.Status == true
                         select new Student
                         {
@@ -109,6 +109,29 @@ namespace StudentAttandanceLibrary.Repositories.Implements
                             Gender = student.Gender,
                             Address = student.Address,
                         };
+            return query;
+        }
+
+        public IQueryable<StudentDto> GetStudentsByK(string k)
+        {
+            var query = from student in context.Students
+                        join account in context.Accounts
+                        on student.StudentId equals account.AccountId
+                        where student.StudentId.Substring(2, 2).Contains(k.Substring(1, 2))
+                                    //where account.Status == true
+                                    select new StudentDto
+                                    {
+                                        StudentId = student.StudentId,
+                                        FullName = student.FullName,
+                                        UserName = student.FullName,
+                                        Email = account.Email,
+                                        Image = student.Image,
+                                        Dob = student.Dob,
+                                        Gender = student.Gender,
+                                        Address = student.Address,
+                                        RoleId = account.RoleId,
+                                        Status = account.Status,
+                                    };
             return query;
         }
     }

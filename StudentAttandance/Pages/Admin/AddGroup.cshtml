@@ -1,0 +1,139 @@
+﻿@page
+@using Newtonsoft.Json
+@using StudentAttandanceLibrary.ModelDtos
+@using StudentAttandanceLibrary.Models
+@model StudentAttandance.Pages.Admin.AddGroupModel
+@{
+    var account = HttpContext.Session.GetString("Account");
+    var teachers = ViewData["Teachers"] as List<TeacherDto>;
+    var terms = ViewData["Terms"] as List<Term>;
+    var courses = ViewData["Course"] as List<Course>;
+    var rooms = ViewData["Rooms"] as List<Room>;
+    var slots = ViewData["Slots"] as List<TimeSlot>;
+    var k = ViewData["K"] as List<string>;
+}
+<div class="row bg-light p-3">
+    <div class="col-md-4 d-flex justify-content-start">
+        <h6><a class="text-decoration-none" href="/home">Home</a><span> | Group List</span></h6>
+    </div>
+    <div class="col-md-8 d-flex justify-content-end">
+        <a class="text-decoration-none" href="#">
+            <span class="private-information text-light p-1 rounded-2"> @(JsonConvert.DeserializeObject<Account>(account.ToString()).AccountId)</span>
+        </a> &nbsp;|&nbsp;
+        <a class="text-decoration-none" href="#">
+            <span class="private-information text-light p-1 rounded-2">logout</span>
+        </a> &nbsp;|&nbsp;
+        <a class="text-decoration-none">
+            <span class="private-information text-light p-1 rounded-2">
+                CAMPUS:
+                FPTU-Hòa Lạc
+            </span>
+        </a>
+    </div>
+</div>
+<div class="row my-4">
+    <div class="col-md-2 my-2">
+        <i class='fa fa-angle-left' style='font-size:20px'></i>
+        <a class="" href="" style="font-size: 20px;">Back</a>
+    </div>
+    <div class="col-md-8">
+        <h1 class="text-center py-1 rounded">Add Groups</h1>
+    </div>
+    <div class="col-md-2">
+    </div>
+</div>
+<div class="my-4">
+</div>
+<form action="">
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Date Start:</label>
+        <div class="col-sm-4">
+            <input name="dateStart" type="date" class="form-control">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Number of Slot:</label>
+        <div class="col-sm-4">
+            <input name="numberSlot" min="1" type="number" class="form-control">
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-2">
+            <label class="col-form-label">K: </label>
+        </div>
+        <div class="col-sm-4">
+            <select name="k" class="form-select form-select-dm" aria-label=".form-select-dm example">
+                @foreach (var i in k)
+                {
+                    <option value="@i.ToString()">@i.ToString()</option>
+                }
+            </select>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-2">
+            <label class="col-form-label">Teacher: </label>
+        </div>
+        <div class="col-sm-4">
+            <select name="teacher" class="form-select form-select-dm" aria-label=".form-select-dm example">
+                 @foreach (var i in teachers)
+                {
+                    <option value="@i.TeacherId">@i.UserName</option>
+                }
+            </select>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-2">
+            <label class="col-form-label">Term: </label>
+        </div>
+        <div class="col-sm-4">
+            <select name="term" class="form-select form-select-dm" aria-label=".form-select-dm example">
+                 @foreach (var i in terms)
+                {
+                    <option value="@i.TermId">@i.TermName</option>
+                }
+            </select>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-2">
+            <label class="col-form-label">Course: </label>
+        </div>
+        <div class="col-sm-4">
+            <select name="course" class="form-select form-select-dm" aria-label=".form-select-dm example">
+                 @foreach (var i in courses)
+                {
+                    <option value="@i.CourseId">@i.CourseName</option>
+                }
+            </select>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-2">
+            <label class="col-form-label">Room: </label>
+        </div>
+        <div class="col-sm-4">
+            <select name="room" class="form-select form-select-dm" aria-label=".form-select-dm example">
+                 @foreach (var i in rooms)
+                {
+                    <option value="@i.RoomId">@i.RoomName</option>
+                }
+            </select>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-2">
+            <label class="col-form-label">Slot: </label>
+        </div>
+        <div class="col-sm-4">
+            <select name="slot" class="form-select form-select-dm" aria-label=".form-select-dm example">
+                 @foreach (var i in slots)
+                {
+                    <option value="@i.TimeSlotId">@i.Description</option>
+                }
+            </select>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-success">Add</button>
+</form>

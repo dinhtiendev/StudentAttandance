@@ -5,6 +5,7 @@
 @model StudentAttandance.Pages.Admin.StudentManagementModel
 @{
     var account = HttpContext.Session.GetString("Account");
+    var currentK = ViewBag.K as string;
 }
 <div class="row bg-light p-3">
     <div class="col-md-4 d-flex justify-content-start">
@@ -25,15 +26,26 @@
         </a>
     </div>
 </div>
-<form method="post" enctype="multipart/form-data">
-    <div class="row my-3">
-        <div class="row">
-            <div class="col-md-9">
-                <h4>Total Students: @ViewBag.TotalStudents</h4>
-            </div>
-            <div class="col-md-3">
-                <div class="mb-3">
-                    <div class="row">
+
+<div class="row my-3">
+    <div class="row">
+        <div class="col-md-2">
+            <h5>Total Students: @ViewBag.TotalStudents</h5>
+        </div>
+        <div class="col-md-7">
+            <form id="filterK" method="get">
+                <select id="kSelected" name="k" class="form-select form-select-sm" aria-label=".form-select-sm example" style="width: 100px;">
+                    @foreach (var item in ViewBag.ListK as List<string>)
+                    {
+                        <option selected='@(currentK.Equals(item.ToString())?"selected":null)' value="@item.ToString()">@item.ToString()</option>
+                    }
+                </select>
+            </form>
+        </div>
+        <div class="col-md-3">
+            <div class="mb-3">
+                <div class="row">
+                    <form method="post" enctype="multipart/form-data">
                         <span asp-validation-for="ExcelFile" class="text-danger"></span>
                         @if (ViewData["Message"] != null)
                         {
@@ -45,68 +57,70 @@
                         <div class="col-md-4">
                             <input class="btn btn-success" type="submit" asp-page-handler="Add" value="Add">
                         </div>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>
-        <table class="table table-bordered">
-            <thead style="background-color: #6b90da;">
-                <tr class="align-middle">
-                    <th class="fw-normal ">NO</th>
-                    <th class="fw-normal">ROLLNUMBER</th>
-                    <th class="fw-normal">FULLNAME</th>
-                    <th class="fw-normal">EMAIL</th>
-                    <th class="fw-normal">IMAGE</th>
-                    <th class="fw-normal">DATE OF BIRTH</th>
-                    <th class="fw-normal">GENDER</th>
-                    <th class="fw-normal">ACTION</th>
-                </tr>
-            </thead>
-            <tbody>
-                @{
-                    int index = 0;
-                }
-                @foreach (var student in @ViewBag.StudentList as List<StudentDto>)
-                {
-                    index++;
-                    <tr>
-                        <td>@index</td>
-                        <td>@student.StudentId</td>
-                        <td>@student.FullName</td>
-                        <td>@student.Email</td>
-                        <td>
-                            <p class="text-center">
-                                @if (string.IsNullOrWhiteSpace(@student.Image) && @student.Gender)
-                                {
-                                    <img src="~/images/avatar/Default_Avatar_Male.png" alt="Image" width="100px" height="100px"
-                                 style="border: 1px solid black;">
-                                }
-                                else if (string.IsNullOrWhiteSpace(@student.Image) && !@student.Gender)
-                                {
-                                    <img src="~/images/avatar/Default_Avatar_Female.png" alt="Image" width="100px" height="100px"
-                                 style="border: 1px solid black;">
-                                }
-                                else
-                                {
-                                    <img src="~/images/avatar/@student.Image" alt="Image" width="100px" height="100px"
-                                 style="border: 1px solid black;">
-                                }
-                            </p>
-                        </td>
-                        <td>
-                            @student.Dob.ToString("dd-MM-yyyy")
-                        </td>
-                        <td>
-                            @if (@student.Gender)
+    </div>
+    <table class="table table-bordered">
+        <thead style="background-color: #6b90da;">
+            <tr class="align-middle">
+                <th class="fw-normal ">NO</th>
+                <th class="fw-normal">ROLLNUMBER</th>
+                <th class="fw-normal">FULLNAME</th>
+                <th class="fw-normal">EMAIL</th>
+                <th class="fw-normal">IMAGE</th>
+                <th class="fw-normal">DATE OF BIRTH</th>
+                <th class="fw-normal">GENDER</th>
+                <th class="fw-normal">ACTION</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int index = 0;
+            }
+            @foreach (var student in @ViewBag.StudentList as List<StudentDto>)
+            {
+                index++;
+                <tr>
+                    <td>@index</td>
+                    <td>@student.StudentId</td>
+                    <td>@student.FullName</td>
+                    <td>@student.Email</td>
+                    <td>
+                        <p class="text-center">
+                            @if (string.IsNullOrWhiteSpace(@student.Image) && @student.Gender)
                             {
-                                <p>Male</p>
+                                <img src="~/images/avatar/Default_Avatar_Male.png" alt="Image" width="100px" height="100px"
+                             style="border: 1px solid black;">
+                            }
+                            else if (string.IsNullOrWhiteSpace(@student.Image) && !@student.Gender)
+                            {
+                                <img src="~/images/avatar/Default_Avatar_Female.png" alt="Image" width="100px" height="100px"
+                             style="border: 1px solid black;">
                             }
                             else
                             {
-                                <p>Female</p>
+                                <img src="~/images/avatar/@student.Image" alt="Image" width="100px" height="100px"
+                             style="border: 1px solid black;">
                             }
-                        </td>
-                        <td>
+                        </p>
+                    </td>
+                    <td>
+                        @student.Dob.ToString("dd-MM-yyyy")
+                    </td>
+                    <td>
+                        @if (@student.Gender)
+                        {
+                            <p>Male</p>
+                        }
+                        else
+                        {
+                            <p>Female</p>
+                        }
+                    </td>
+                    <td>
+                        <form method="post" enctype="multipart/form-data">
                             <p class="text-center">
                                 @if (@student.Status == true)
                                 {
@@ -117,10 +131,18 @@
                                     <a class="btn btn-primary text-decoration-none" asp-page-handler="Restore" asp-route-id="@student.StudentId">Restore</a>
                                 }
                             </p>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
-</form>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<script>
+    var selectElement = document.getElementById("kSelected");
+
+    selectElement.addEventListener("change", function() {
+        var formElement = document.getElementById("filterK");
+        formElement.submit();
+    });
+</script>

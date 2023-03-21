@@ -1,0 +1,91 @@
+﻿@page "/groupmanagement"
+@using Newtonsoft.Json
+@using StudentAttandanceLibrary.Models
+@model StudentAttandance.Pages.Admin.GroupManagementModel
+@{
+    var account = HttpContext.Session.GetString("Account");
+}
+<div class="row bg-light p-3">
+    <div class="col-md-4 d-flex justify-content-start">
+        <h6><a class="text-decoration-none" href="/home">Home</a><span> | Group List</span></h6>
+    </div>
+    <div class="col-md-8 d-flex justify-content-end">
+        <a class="text-decoration-none" href="#">
+            <span class="private-information text-light p-1 rounded-2"> @(JsonConvert.DeserializeObject<Account>(account.ToString()).AccountId)</span>
+        </a> &nbsp;|&nbsp;
+        <a class="text-decoration-none" href="#">
+            <span class="private-information text-light p-1 rounded-2">logout</span>
+        </a> &nbsp;|&nbsp;
+        <a class="text-decoration-none">
+            <span class="private-information text-light p-1 rounded-2">
+                CAMPUS:
+                FPTU-Hòa Lạc
+            </span>
+        </a>
+    </div>
+</div>
+<div class="row my-3">
+    <div class="row">
+        <div class="col-md-2">
+            <h5>Total Lecturers: 100</h5>
+        </div>
+        <div class="col-md-2">
+            <form id="filterTerm" method="get">
+                <select id="tSelected" name="k" class="form-select form-select-sm"
+                        aria-label=".form-select-sm example" style="width: 150px;">
+                    <option value="">Summer2022</option>
+                </select>
+            </form>
+        </div>
+        <div class="col-md-2">
+            <form id="filterCourse" method="get">
+                <select id="cSelected" name="k" class="form-select form-select-sm"
+                        aria-label=".form-select-sm example" style="width: 200px;">
+                    <option value="">Programming with java</option>
+                </select>
+            </form>
+        </div>
+        <div class="col-md-3">
+        </div>
+        <div class="col-md-3">
+            <div class="mb-3">
+                <form action="">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <input class="form-control" type="file" id="formFile">
+                        </div>
+                        <div class="col-md-4">
+                            <input class="btn btn-success" type="submit" value="Add">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <table class="table table-bordered">
+        <thead style="background-color: #6b90da;">
+            <tr class="align-middle">
+                <th class="fw-normal ">NO</th>
+                <th class="fw-normal">GROUP NAME</th>
+                <th class="fw-normal">TEACHER</th>
+                <th class="fw-normal">ROOM</th>
+                <th class="fw-normal">NUMBER OF SLOTS</th>
+                <th class="fw-normal">TOTAL STUDENTS</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>SE1601</td>
+                <td>DatNT</td>
+                <td>BE-202</td>
+                <td>
+                    30
+                </td>
+                <td>
+                    30
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
