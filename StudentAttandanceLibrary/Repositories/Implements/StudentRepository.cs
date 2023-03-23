@@ -117,21 +117,47 @@ namespace StudentAttandanceLibrary.Repositories.Implements
             var query = from student in context.Students
                         join account in context.Accounts
                         on student.StudentId equals account.AccountId
-                        where student.StudentId.Substring(2, 2).Contains(k.Substring(1, 2))
-                                    //where account.Status == true
-                                    select new StudentDto
-                                    {
-                                        StudentId = student.StudentId,
-                                        FullName = student.FullName,
-                                        UserName = student.FullName,
-                                        Email = account.Email,
-                                        Image = student.Image,
-                                        Dob = student.Dob,
-                                        Gender = student.Gender,
-                                        Address = student.Address,
-                                        RoleId = account.RoleId,
-                                        Status = account.Status,
-                                    };
+                        where student.StudentId.Substring(0,4).Contains(k.Substring(1,2))
+                                    && account.Status == true
+                        orderby Convert.ToInt32(student.StudentId.Substring(4, 4)) ascending
+                        select new StudentDto
+                        {
+                            StudentId = student.StudentId,
+                            FullName = student.FullName,
+                            UserName = student.FullName,
+                            Email = account.Email,
+                            Image = student.Image,
+                            Dob = student.Dob,
+                            Gender = student.Gender,
+                            Address = student.Address,
+                            RoleId = account.RoleId,
+                            Status = account.Status,
+                        };
+            //var s = query.ToList().FirstOrDefault().StudentId.Substring(4, 4);
+            return query;
+        }
+
+        public IQueryable<StudentDto> DivideStudents(string k, int offset, int total)
+        {
+            var query = (from student in context.Students
+                         join account in context.Accounts
+                         on student.StudentId equals account.AccountId
+                         where student.StudentId.Substring(0, 4).Contains(k.Substring(1, 2))
+                                     && account.Status == true
+                         orderby Convert.ToInt32(student.StudentId.Substring(4, 4)) ascending
+                         select new StudentDto
+                         {
+                             StudentId = student.StudentId,
+                             FullName = student.FullName,
+                             UserName = student.FullName,
+                             Email = account.Email,
+                             Image = student.Image,
+                             Dob = student.Dob,
+                             Gender = student.Gender,
+                             Address = student.Address,
+                             RoleId = account.RoleId,
+                             Status = account.Status,
+                         }).Skip(offset).Take(total);
             return query;
         }
     }

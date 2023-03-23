@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using StudentAttandanceLibrary.CommonFunctions;
+using StudentAttandanceLibrary.Models;
 using StudentAttandanceLibrary.Repositories.IRepositories;
+using StudentAttandanceLibrary.Validation.ModelValidation;
 
 namespace StudentAttandance.Pages.Admin
 {
@@ -34,18 +36,95 @@ namespace StudentAttandance.Pages.Admin
 
         public IActionResult OnGet()
         {
-            ViewData["Teachers"] = _teacherRepository.GetAllTeachers().ToList();
+            //ViewData["Teachers"] = _teacherRepository.GetTeachers().ToList();
             ViewData["Terms"] = _termRepository.GetAllTerms().ToList();
             ViewData["Course"] = _courseRepository.GetAllCourses().ToList();
-            ViewData["Rooms"] = _roomRepository.GetRooms().ToList();
-            ViewData["Slots"] = _timeSlotRepository.GetTimeSlots().ToList();
-            ViewData["K"] = DBHelper.GetAllK(_studentRepository.GetStudents());
+            //ViewData["Rooms"] = _roomRepository.GetRooms().ToList();
+            //ViewData["Slots"] = _timeSlotRepository.GetTimeSlots().ToList();
+            ViewData["KS"] = DBHelper.GetAllK(_studentRepository.GetStudents()).ToList();
             return Page();
         }
 
-        public IActionResult OnPost()
+        public IActionResult OnPost(AddGroupValidation addGroupValidation)
         {
-            return Page();
+            var k = addGroupValidation.KS;
+            var students = _studentRepository.GetStudentsByK(k);
+
+            int totalStudentInK = students.ToList().Count();
+            int totalStudentsInGroup = 20;
+            int totalGroup = (int)Math.Ceiling((double)totalStudentInK / totalStudentsInGroup);
+
+            int groupIndex = 0;
+            int rowSkip = 0;
+
+            var ignouTeachers = new List<string>();
+            var addSessions = new List<Session>();
+            var addStudentGroups = new List<StudentGroup>();
+
+            var teachers = _teacherRepository.GetAllTeachers().ToList();
+
+            for (int i = 0; i < totalGroup; i++)
+            {
+                groupIndex++;
+                string groupName = "SE" + k.Substring(1, 2) + ((groupIndex >= 1 && groupIndex <= 9) ? ("0" + groupIndex) : groupIndex);
+                string teacherId = "";
+                //if (ignouTeachers.Count() == 0)
+                //{
+                teacherId = teachers.FirstOrDefault().TeacherId;
+                //    ignouTeachers.Add(teacherId);
+                //} else
+                //{
+                //}
+                var group = new Group
+                {
+                    TeacherId = teacherId,
+                    GroupName = groupName,
+                    TermId = Convert.ToInt32(addGroupValidation.TermId),
+                    CourseId = Convert.ToInt32(addGroupValidation.CourseId),
+                };
+                _groupRepository.AddGroup(group);
+
+                var currentGroup = _groupRepository.GetGroupsByConditions(groupName, Convert.ToInt32(addGroupValidation.TermId), Convert.ToInt32(addGroupValidation.CourseId)).FirstOrDefault();
+                var divide = _studentRepository.DivideStudents(k, rowSkip, totalStudentsInGroup).ToList();
+
+                for (int j = 0; j < divide.Count; j++)
+                {
+                    var sg = new StudentGroup
+                    {
+                        GroupId = currentGroup.GroupId,
+                        StudentId = divide[j].StudentId,
+                    };
+                    addStudentGroups.Add(sg);
+                }
+                divide.Clear();
+                rowSkip = addStudentGroups.Count;
+
+                DateTime currentDate = new DateTime();
+                DateTime newDate = new DateTime();
+
+                var room = _roomRepository.GetRooms().FirstOrDefault();
+                for (int o = 0; o < addGroupValidation.NumberSlot; o++)
+                {
+                    var x = DBHelper.GetDateForSession(addGroupValidation.DateStart, currentDate, newDate, groupIndex, o);
+                    var session = new Session
+                    {
+                        GroupId = currentGroup.GroupId,
+                        Attanded = false,
+                        Index = o + 1,
+                        RoomId = room.RoomId,
+                        TeacherId = teacherId,
+                        TimeSlotId = DBHelper.GetTimeSlot(groupIndex),
+                        Date = x,
+                    };
+                    addSessions.Add(session);
+                    currentDate = x;
+                }
+            }
+
+            _studentGroupRepository.AddStudentGroups(addStudentGroups);
+            _sessionRepository.AddSessions(addSessions);
+
+            return RedirectToAction("/groupmanagement");
         }
     }
 }

@@ -1,9 +1,15 @@
 ﻿@page "/groupmanagement"
 @using Newtonsoft.Json
+@using StudentAttandanceLibrary.ModelDtos
 @using StudentAttandanceLibrary.Models
 @model StudentAttandance.Pages.Admin.GroupManagementModel
 @{
     var account = HttpContext.Session.GetString("Account");
+    var terms = ViewBag.Terms as List<Term>;
+    var courses = ViewBag.Courses as List<Course>;
+    var groups = ViewBag.Groups as List<GroupDto>;
+    int currentT = ViewBag.CurrentTerm;
+    int currentC = ViewBag.CurrentCourse;
 }
 <div class="row bg-light p-3">
     <div class="col-md-4 d-flex justify-content-start">
@@ -31,17 +37,23 @@
         </div>
         <div class="col-md-2">
             <form id="filterTerm" method="get">
-                <select id="tSelected" name="k" class="form-select form-select-sm"
+                <select id="tSelected" name="termId" class="form-select form-select-sm"
                         aria-label=".form-select-sm example" style="width: 150px;">
-                    <option value="">Summer2022</option>
+                    @foreach (var item in terms)
+                    {
+                        <option selected='@((currentT == item.TermId)?"selected":null)' value="@item.TermId">@item.TermName</option>
+                    }
                 </select>
             </form>
         </div>
         <div class="col-md-2">
             <form id="filterCourse" method="get">
-                <select id="cSelected" name="k" class="form-select form-select-sm"
+                <select id="cSelected" name="courseId" class="form-select form-select-sm"
                         aria-label=".form-select-sm example" style="width: 200px;">
-                    <option value="">Programming with java</option>
+                    @foreach (var item in courses)
+                    {
+                        <option selected='@((currentC == item.CourseId)?"selected":null)' value="@item.CourseId">@item.CourseName</option>
+                    }
                 </select>
             </form>
         </div>
@@ -49,43 +61,67 @@
         </div>
         <div class="col-md-3">
             <div class="mb-3">
-                <form action="">
-                    <div class="row">
-                        <div class="col-md-8">
-                            <input class="form-control" type="file" id="formFile">
-                        </div>
-                        <div class="col-md-4">
-                            <input class="btn btn-success" type="submit" value="Add">
-                        </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <a href="/addgroup" class="btn btn-success">Add Groups</a>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>
-    <table class="table table-bordered">
-        <thead style="background-color: #6b90da;">
-            <tr class="align-middle">
-                <th class="fw-normal ">NO</th>
-                <th class="fw-normal">GROUP NAME</th>
-                <th class="fw-normal">TEACHER</th>
-                <th class="fw-normal">ROOM</th>
-                <th class="fw-normal">NUMBER OF SLOTS</th>
-                <th class="fw-normal">TOTAL STUDENTS</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>1</td>
-                <td>SE1601</td>
-                <td>DatNT</td>
-                <td>BE-202</td>
-                <td>
-                    30
-                </td>
-                <td>
-                    30
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    @if (groups.Count() == 0)
+    {
+        <h4 class="text-center my-4" style="color: red;">List is Empty</h4>
+    }
+    else
+    {
+        <table class="table table-bordered">
+            <thead style="background-color: #6b90da;">
+                <tr class="align-middle">
+                    <th class="fw-normal ">NO</th>
+                    <th class="fw-normal">GROUP NAME</th>
+                    <th class="fw-normal">TEACHER</th>
+                    <th class="fw-normal">ROOM</th>
+                    <th class="fw-normal">NUMBER OF SLOTS</th>
+                    <th class="fw-normal">TOTAL STUDENTS</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int index = 0;
+                }
+                @foreach (var item in groups)
+                {
+                    index++;
+                    <tr>
+                        <td>@index</td>
+                        <td>@item.GroupName</td>
+                        <td>@item.Teacher</td>
+                        <td>@item.Room</td>
+                        <td>
+                            @item.NumberSlots
+                        </td>
+                        <td>
+                            @item.TotalStudents
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
 </div>
+<script>
+    var selectElement1 = document.getElementById("tSelected");
+
+    selectElement1.addEventListener("change", function() {
+        var formElement1 = document.getElementById("filterTerm");
+        formElement1.submit();
+    });
+
+    var selectElement2 = document.getElementById("cSelected");
+
+    selectElement2.addEventListener("change", function() {
+        var formElement2 = document.getElementById("filterCourse");
+        formElement2.submit();
+    });
+</script>

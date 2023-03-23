@@ -1,20 +1,19 @@
-﻿@page
+﻿@page "/addgroup"
 @using Newtonsoft.Json
-@using StudentAttandanceLibrary.ModelDtos
 @using StudentAttandanceLibrary.Models
 @model StudentAttandance.Pages.Admin.AddGroupModel
 @{
     var account = HttpContext.Session.GetString("Account");
-    var teachers = ViewData["Teachers"] as List<TeacherDto>;
+    //var teachers = ViewData["Teachers"] as List<Teacher>;
     var terms = ViewData["Terms"] as List<Term>;
     var courses = ViewData["Course"] as List<Course>;
-    var rooms = ViewData["Rooms"] as List<Room>;
-    var slots = ViewData["Slots"] as List<TimeSlot>;
-    var k = ViewData["K"] as List<string>;
+    //var rooms = ViewData["Rooms"] as List<Room>;
+    //var slots = ViewData["Slots"] as List<TimeSlot>;
+    var ks = ViewData["KS"] as List<string>;
 }
 <div class="row bg-light p-3">
     <div class="col-md-4 d-flex justify-content-start">
-        <h6><a class="text-decoration-none" href="/home">Home</a><span> | Group List</span></h6>
+        <h6><a class="text-decoration-none" href="/home">Home</a><span> | Add Group</span></h6>
     </div>
     <div class="col-md-8 d-flex justify-content-end">
         <a class="text-decoration-none" href="#">
@@ -34,7 +33,7 @@
 <div class="row my-4">
     <div class="col-md-2 my-2">
         <i class='fa fa-angle-left' style='font-size:20px'></i>
-        <a class="" href="" style="font-size: 20px;">Back</a>
+        <a class="" href="/groupmanagement" style="font-size: 20px;">Back</a>
     </div>
     <div class="col-md-8">
         <h1 class="text-center py-1 rounded">Add Groups</h1>
@@ -44,17 +43,17 @@
 </div>
 <div class="my-4">
 </div>
-<form action="">
+<form method="post" enctype="multipart/form-data">
     <div class="form-group row">
         <label class="col-sm-2 col-form-label">Date Start:</label>
         <div class="col-sm-4">
-            <input name="dateStart" type="date" class="form-control">
+            <input name="AddGroupValidation.DateStart" type="date" class="form-control">
         </div>
     </div>
     <div class="form-group row">
         <label class="col-sm-2 col-form-label">Number of Slot:</label>
         <div class="col-sm-4">
-            <input name="numberSlot" min="1" type="number" class="form-control">
+            <input name="AddGroupValidation.NumberSlot" min="1" type="number" class="form-control">
         </div>
     </div>
     <div class="form-group row">
@@ -62,33 +61,33 @@
             <label class="col-form-label">K: </label>
         </div>
         <div class="col-sm-4">
-            <select name="k" class="form-select form-select-dm" aria-label=".form-select-dm example">
-                @foreach (var i in k)
+            <select name="AddGroupValidation.KS" class="form-select form-select-dm" aria-label=".form-select-dm example">
+                @foreach (var i in ks)
                 {
-                    <option value="@i.ToString()">@i.ToString()</option>
+                    <option value="@i">@i</option>
                 }
             </select>
         </div>
     </div>
-    <div class="form-group row">
+    @*<div class="form-group row">
         <div class="col-sm-2">
             <label class="col-form-label">Teacher: </label>
         </div>
         <div class="col-sm-4">
-            <select name="teacher" class="form-select form-select-dm" aria-label=".form-select-dm example">
+            <select name="AddGroupValidation.TeacherId" class="form-select form-select-dm" aria-label=".form-select-dm example">
                  @foreach (var i in teachers)
                 {
                     <option value="@i.TeacherId">@i.UserName</option>
                 }
             </select>
         </div>
-    </div>
+    </div>*@
     <div class="form-group row">
         <div class="col-sm-2">
             <label class="col-form-label">Term: </label>
         </div>
         <div class="col-sm-4">
-            <select name="term" class="form-select form-select-dm" aria-label=".form-select-dm example">
+            <select name="AddGroupValidation.TermId" class="form-select form-select-dm" aria-label=".form-select-dm example">
                  @foreach (var i in terms)
                 {
                     <option value="@i.TermId">@i.TermName</option>
@@ -101,7 +100,7 @@
             <label class="col-form-label">Course: </label>
         </div>
         <div class="col-sm-4">
-            <select name="course" class="form-select form-select-dm" aria-label=".form-select-dm example">
+            <select name="AddGroupValidation.CourseId" class="form-select form-select-dm" aria-label=".form-select-dm example">
                  @foreach (var i in courses)
                 {
                     <option value="@i.CourseId">@i.CourseName</option>
@@ -109,12 +108,12 @@
             </select>
         </div>
     </div>
-    <div class="form-group row">
+    @*<div class="form-group row">
         <div class="col-sm-2">
             <label class="col-form-label">Room: </label>
         </div>
         <div class="col-sm-4">
-            <select name="room" class="form-select form-select-dm" aria-label=".form-select-dm example">
+            <select name="AddGroupValidation.RoomId" class="form-select form-select-dm" aria-label=".form-select-dm example">
                  @foreach (var i in rooms)
                 {
                     <option value="@i.RoomId">@i.RoomName</option>
@@ -127,13 +126,13 @@
             <label class="col-form-label">Slot: </label>
         </div>
         <div class="col-sm-4">
-            <select name="slot" class="form-select form-select-dm" aria-label=".form-select-dm example">
+            <select name="AddGroupValidation.SlotId" class="form-select form-select-dm" aria-label=".form-select-dm example">
                  @foreach (var i in slots)
                 {
                     <option value="@i.TimeSlotId">@i.Description</option>
                 }
             </select>
         </div>
-    </div>
+    </div>*@
     <button type="submit" class="btn btn-success">Add</button>
 </form>

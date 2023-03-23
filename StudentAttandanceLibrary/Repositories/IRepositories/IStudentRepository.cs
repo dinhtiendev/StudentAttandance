@@ -14,6 +14,7 @@ namespace StudentAttandanceLibrary.Repositories.IRepositories
         public List<Student> GetStudents();
         public IQueryable<Student> GetStudentsByConditions(int termId, int courseId, int groupId);
         public IQueryable<StudentDto> GetStudentsByK(string k);
+        public IQueryable<StudentDto> DivideStudents(string k ,int offset, int total);
 
     }
 }

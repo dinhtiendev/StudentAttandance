@@ -23,23 +23,25 @@ namespace StudentAttandance.Pages.Admin
 
         public IActionResult OnGet(int termId, int courseId)
         {
-            var terms = _termRepository.GetAllTerms();
-            ViewData["Terms"] = terms.ToList();
+            var terms = _termRepository.GetAllTerms().ToList();
+            ViewData["Terms"] = terms;
 
-            var courses = _courseRepository.GetAllCourses();
-            ViewData["Courses"] = courses.ToList();
+            var courses = _courseRepository.GetAllCourses().ToList();
+            ViewData["Courses"] = courses;
 
-            if (termId <= 0 || termId > terms.Count())
+            if (termId <= 0 || termId > terms.Count)
             {
                 termId = terms.LastOrDefault().TermId;
             }
-
-            if (courseId <= 0 || courseId > courses.Count())
+            ViewData["CurrentTerm"] = termId;
+            if (courseId <= 0 || courseId > courses.Count)
             {
                 courseId = courses.LastOrDefault().CourseId;
             }
+            ViewData["CurrentCourse"] = courseId;
 
-
+            var listGroup = _groupRepository.FilterGroups(termId, courseId).ToList();
+            ViewData["Groups"] = listGroup;
             return Page();
         }
 
