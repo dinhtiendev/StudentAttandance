@@ -33,28 +33,30 @@
 <div class="row my-3">
     <div class="row">
         <div class="col-md-2">
-            <h5>Total Lecturers: 100</h5>
+            <h5>Total Groups: @groups.Count</h5>
         </div>
-        <div class="col-md-2">
-            <form id="filterTerm" method="get">
-                <select id="tSelected" name="termId" class="form-select form-select-sm"
-                        aria-label=".form-select-sm example" style="width: 150px;">
-                    @foreach (var item in terms)
-                    {
-                        <option selected='@((currentT == item.TermId)?"selected":null)' value="@item.TermId">@item.TermName</option>
-                    }
-                </select>
-            </form>
-        </div>
-        <div class="col-md-2">
-            <form id="filterCourse" method="get">
-                <select id="cSelected" name="courseId" class="form-select form-select-sm"
-                        aria-label=".form-select-sm example" style="width: 200px;">
-                    @foreach (var item in courses)
-                    {
-                        <option selected='@((currentC == item.CourseId)?"selected":null)' value="@item.CourseId">@item.CourseName</option>
-                    }
-                </select>
+        <div class="col-md-4">
+            <form id="filter" method="get" class="row">
+                <div class="col-md-6">
+                    <select id="tSelected" name="termId" class="form-select form-select-sm"
+                            aria-label=".form-select-sm example" style="width: 150px;">
+                        @foreach (var item in terms)
+                        {
+                            <option selected='@((currentT == item.TermId)?"selected":null)' value="@item.TermId">@item.TermName</option>
+                        }
+                    </select>
+                    @*</form>*@
+                </div>
+                <div class="col-md-6">
+                    @*<form id="filterCourse" method="get">*@
+                    <select id="cSelected" name="courseId" class="form-select form-select-sm"
+                            aria-label=".form-select-sm example" style="width: 200px;">
+                        @foreach (var item in courses)
+                        {
+                            <option selected='@((currentC == item.CourseId)?"selected":null)' value="@item.CourseId">@item.CourseName</option>
+                        }
+                    </select>
+                </div>
             </form>
         </div>
         <div class="col-md-3">
@@ -62,7 +64,9 @@
         <div class="col-md-3">
             <div class="mb-3">
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-7">
+                    </div>
+                    <div class="col-md-5">
                         <a href="/addgroup" class="btn btn-success">Add Groups</a>
                     </div>
                 </div>
@@ -81,9 +85,9 @@
                     <th class="fw-normal ">NO</th>
                     <th class="fw-normal">GROUP NAME</th>
                     <th class="fw-normal">TEACHER</th>
-                    <th class="fw-normal">ROOM</th>
                     <th class="fw-normal">NUMBER OF SLOTS</th>
                     <th class="fw-normal">TOTAL STUDENTS</th>
+                    <th class="fw-normal">ACTION</th>
                 </tr>
             </thead>
             <tbody>
@@ -97,12 +101,14 @@
                         <td>@index</td>
                         <td>@item.GroupName</td>
                         <td>@item.Teacher</td>
-                        <td>@item.Room</td>
                         <td>
                             @item.NumberSlots
                         </td>
                         <td>
                             @item.TotalStudents
+                        </td>
+                        <td>
+                            <a class="btn btn-danger text-decoration-none" asp-page-handler="Delete" asp-route-groupid="@item.GroupId">Delete</a>
                         </td>
                     </tr>
                 }
@@ -112,16 +118,20 @@
 </div>
 <script>
     var selectElement1 = document.getElementById("tSelected");
+    var selectElement2 = document.getElementById("cSelected");
 
     selectElement1.addEventListener("change", function() {
-        var formElement1 = document.getElementById("filterTerm");
+        var formElement1 = document.getElementById("filter");
         formElement1.submit();
     });
 
-    var selectElement2 = document.getElementById("cSelected");
-
     selectElement2.addEventListener("change", function() {
-        var formElement2 = document.getElementById("filterCourse");
-        formElement2.submit();
+        var formElement1 = document.getElementById("filter");
+        formElement1.submit();
     });
+
+            //selectElement2.addEventListener("change", function() {
+            //    var formElement2 = document.getElementById("filterCourse");
+            //    formElement2.submit();
+            //});
 </script>

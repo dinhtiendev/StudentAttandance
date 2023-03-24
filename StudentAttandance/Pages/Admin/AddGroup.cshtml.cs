@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Newtonsoft.Json;
 using StudentAttandanceLibrary.CommonFunctions;
 using StudentAttandanceLibrary.Models;
 using StudentAttandanceLibrary.Repositories.IRepositories;
@@ -36,13 +37,22 @@ namespace StudentAttandance.Pages.Admin
 
         public IActionResult OnGet()
         {
-            //ViewData["Teachers"] = _teacherRepository.GetTeachers().ToList();
-            ViewData["Terms"] = _termRepository.GetAllTerms().ToList();
-            ViewData["Course"] = _courseRepository.GetAllCourses().ToList();
-            //ViewData["Rooms"] = _roomRepository.GetRooms().ToList();
-            //ViewData["Slots"] = _timeSlotRepository.GetTimeSlots().ToList();
-            ViewData["KS"] = DBHelper.GetAllK(_studentRepository.GetStudents()).ToList();
-            return Page();
+            if (HttpContext.Session.GetString("Account") != null)
+            {
+                var account = JsonConvert.DeserializeObject<Account>(HttpContext.Session.GetString("Account"));
+
+                if (account.RoleId == 1)
+                {
+                    //ViewData["Teachers"] = _teacherRepository.GetTeachers().ToList();
+                    ViewData["Terms"] = _termRepository.GetAllTerms().ToList();
+                    ViewData["Course"] = _courseRepository.GetAllCourses().ToList();
+                    //ViewData["Rooms"] = _roomRepository.GetRooms().ToList();
+                    //ViewData["Slots"] = _timeSlotRepository.GetTimeSlots().ToList();
+                    ViewData["KS"] = DBHelper.GetAllK(_studentRepository.GetStudents()).ToList();
+                    return Page();
+                }
+            }
+            return RedirectToPage("/error");
         }
 
         public IActionResult OnPost(AddGroupValidation addGroupValidation)

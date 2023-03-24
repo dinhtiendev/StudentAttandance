@@ -8,7 +8,7 @@
 
         public string Teacher { get; set; }
 
-        public string Room { get; set; }
+        //public string Room { get; set; }
 
         public int NumberSlots { get; set; }
 
