@@ -46,7 +46,7 @@ namespace StudentAttandanceLibrary.CommonFunctions
             //}
             //else
 
-            if (currentDate.DayOfWeek.ToString().Equals("Friday"))
+            if (currentDate.DayOfWeek.ToString().Equals("Friday") || currentDate.DayOfWeek.ToString().Equals("Saturday"))
             {
                 newDate = currentDate.AddDays(3);
             }
