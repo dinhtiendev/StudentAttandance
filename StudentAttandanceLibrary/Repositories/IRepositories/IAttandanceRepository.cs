@@ -11,8 +11,9 @@ namespace StudentAttandanceLibrary.Repositories.IRepositories
     {
         public List<AttandanceDto> GetAttandancesByWeekAndStudentId(DateTime startDate, DateTime endDate, String StudentId);
         public List<AttandanceDto> GetAttandancesByWeekAndTeacherId(DateTime startDate, DateTime endDate, String TeacherId);
-        public List<AttandanceDto> GetAttandancesBySlotAndDate(DateTime date, int slot);
+        public List<AttandanceDto> GetAttandancesBySesionId(int sesionId);
+        public List<AttandanceDto> NewAttandancesBySesionId(int sesionId);
         public AttandanceDto GetAttandanceById(int id);
-        public void UpdateAttandances(Dictionary<int, bool> attandances, int sessionId);
+        public void UpdateAttandances(Dictionary<int, bool> attandances);
     }
 }

@@ -16,7 +16,7 @@ namespace StudentAttandance.Pages.User
         {
             this.attandanceRepository = attandanceRepository;
         }
-        public IActionResult OnGet(string slotId, string date, int year, int week)
+        public IActionResult OnGet(string sessionId, int year, int week, int isNew)
         {
             var account = HttpContext.Session.GetString("Account");
             if (account != null)
@@ -24,7 +24,13 @@ namespace StudentAttandance.Pages.User
                 Account? acc = JsonConvert.DeserializeObject<Account>(account.ToString());
                 if (acc.RoleId == 2)
                 {
-                    Attandances = attandanceRepository.GetAttandancesBySlotAndDate(DateTime.Parse(date), Int32.Parse(slotId));
+                    if (isNew == 1)
+                    {
+                        Attandances = attandanceRepository.NewAttandancesBySesionId(Int32.Parse(sessionId));
+                    } else
+                    {
+                        Attandances = attandanceRepository.GetAttandancesBySesionId(Int32.Parse(sessionId));
+                    }
                     ViewData["Year"] = year;
                     ViewData["Week"] = week;
                     return Page();
@@ -46,7 +52,7 @@ namespace StudentAttandance.Pages.User
                     {
                         listAttandance.Add(Int32.Parse(Request.Form["Id " + i]), Boolean.Parse(Request.Form["Attamdance " + i]));
                     }
-                    attandanceRepository.UpdateAttandances(listAttandance, sessionId);
+                    attandanceRepository.UpdateAttandances(listAttandance);
                     return RedirectToPage("viewSchedule", new { year = year, week = week});
                 }
             }

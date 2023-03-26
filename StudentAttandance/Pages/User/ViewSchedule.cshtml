@@ -128,7 +128,7 @@
                                                         @session.Course.CourseCode<br>
                                                         at @session.RoomName<br>
                                                         (
-                                                        <a href="/takeAttendance?slotId=@session.TimeSlot.TimeSlotId&date=@session.Date.ToString("dd/MM/yyyy")&year=@year&week=@week">
+                                                        <a href="/takeAttendance?sessionId=@session.SessionId&year=@year&week=@week&isNew=1">
                                                             <font>Take</font>
                                                         </a>
                                                         )
@@ -142,7 +142,7 @@
                                                         @session.Course.CourseCode<br>
                                                         at @session.RoomName<br>
                                                         (
-                                                        <a href="/takeAttendance?slotId=@session.TimeSlot.TimeSlotId&date=@session.Date.ToString("dd/MM/yyyy")&year=@year&week=@week">
+                                                        <a href="/takeAttendance?sessionId=@session.SessionId&year=@year&week=@week&isNew=0">
                                                             <font color="Green">Edit</font>
                                                         </a>
                                                         )
