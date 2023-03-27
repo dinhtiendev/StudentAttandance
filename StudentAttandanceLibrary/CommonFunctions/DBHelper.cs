@@ -28,31 +28,15 @@ namespace StudentAttandanceLibrary.CommonFunctions
         {
             if (index == 0)
             {
-                if (status == 1 || status == 3)
+                if (numberClass % 2 == 0)
                 {
-                    if (numberClass % 2 == 0)
-                    {
-                        currentDate = dateStart.AddDays(1);
-                    }
-                    else
-                    {
-                        currentDate = dateStart;
-                    }
-                    return currentDate;
+                    currentDate = (status == 1 || status == 2) ? dateStart.AddDays(1) : dateStart;
                 }
-
-                if (status == 2 || status == 4)
+                else
                 {
-                    if (numberClass % 2 == 0)
-                    {
-                        currentDate = dateStart;
-                    }
-                    else
-                    {
-                        currentDate = dateStart.AddDays(1);
-                    }
-                    return currentDate;
+                    currentDate = (status == 3 || status == 4) ? dateStart : dateStart.AddDays(1);
                 }
+                return currentDate;
             }
 
             if (currentDate.DayOfWeek.ToString().Equals("Friday") || currentDate.DayOfWeek.ToString().Equals("Saturday"))

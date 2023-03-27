@@ -43,11 +43,8 @@ namespace StudentAttandance.Pages.Admin
 
                 if (account.RoleId == 1)
                 {
-                    //ViewData["Teachers"] = _teacherRepository.GetTeachers().ToList();
                     ViewData["Terms"] = _termRepository.GetAllTerms().ToList();
                     ViewData["Course"] = _courseRepository.GetAllCourses().ToList();
-                    //ViewData["Rooms"] = _roomRepository.GetRooms().ToList();
-                    //ViewData["Slots"] = _timeSlotRepository.GetTimeSlots().ToList();
                     ViewData["KS"] = DBHelper.GetAllK(_studentRepository.GetStudents()).ToList();
                     return Page();
                 }
@@ -57,6 +54,7 @@ namespace StudentAttandance.Pages.Admin
 
         public IActionResult OnPost(AddGroupValidation addGroupValidation)
         {
+            //Check group just input exist in term or not
             var checkExist = _groupRepository.GetGroupsByTermAndCourse(addGroupValidation.TermId, addGroupValidation.CourseId).ToList();
             if (checkExist.Any())
             {
@@ -65,23 +63,33 @@ namespace StudentAttandance.Pages.Admin
             }
 
             var k = addGroupValidation.KS;
+            //Get all student in k
             var students = _studentRepository.GetStudentsByK(k);
 
             int totalStudentInK = students.ToList().Count();
-            int totalStudentsInGroup = 20;
+            int totalStudentsInGroup = 10;
+            //Round number of classes
             int totalGroup = (int)Math.Ceiling((double)totalStudentInK / totalStudentsInGroup);
 
             int groupIndex = 0;
             int rowSkip = 0;
 
+            //Count number add group of 1 k in a term
             int numberGroupsInTerm = _groupRepository.NumberGroupsInTerm(k.Substring(1,2),addGroupValidation.TermId);
             int status = DBHelper.NumberGroupsInTerm(numberGroupsInTerm);
+            //Over 4 course in a group in 1 term
+            if (status == 0)
+            {
+                ViewData["Message"] = "Full !!!";
+                return OnGet();
+            }
 
             var addSessions = new List<Session>();
             var addStudentGroups = new List<StudentGroup>();
 
             var teachers = _teacherRepository.GetAllTeachers().ToList();
 
+            //Create group 
             for (int i = 0; i < totalGroup; i++)
             {
                 groupIndex++;
@@ -101,6 +109,7 @@ namespace StudentAttandance.Pages.Admin
                 _groupRepository.AddGroup(group);
 
                 var currentGroup = _groupRepository.GetGroupsByConditions(groupName, Convert.ToInt32(addGroupValidation.TermId), Convert.ToInt32(addGroupValidation.CourseId)).FirstOrDefault();
+                //Take 1 number of students and stuff it into a class
                 var divide = _studentRepository.DivideStudents(k, rowSkip, totalStudentsInGroup).ToList();
 
                 for (int j = 0; j < divide.Count; j++)

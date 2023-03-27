@@ -75,7 +75,7 @@ namespace StudentAttandanceLibrary.Repositories.Implements
         public int NumberGroupsInTerm(string className, int termId)
         {
             var query = context.Groups
-                .Where(g => g.TermId == termId && g.GroupName.Contains(className))
+                .Where(g => g.TermId == termId && g.GroupName.Substring(2,2).Contains(className))
             .Select(g => g.CourseId)
             .Distinct();
             return query.ToList().Count;
