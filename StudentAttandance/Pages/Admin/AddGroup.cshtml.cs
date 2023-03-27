@@ -87,16 +87,24 @@ namespace StudentAttandance.Pages.Admin
             var addSessions = new List<Session>();
             var addStudentGroups = new List<StudentGroup>();
 
-            var teachers = _teacherRepository.GetAllTeachers().ToList();
+            Random rand = new Random();
+            var teachers = _teacherRepository.GetAllTeachers().Select(x => x.TeacherId).ToList();
+
+            var randomTeacher = new List<string>();
+            randomTeacher.AddRange(teachers);
 
             //Create group 
             for (int i = 0; i < totalGroup; i++)
             {
                 groupIndex++;
                 string groupName = "SE" + k.Substring(1, 2) + ((groupIndex >= 1 && groupIndex <= 9) ? ("0" + groupIndex) : groupIndex);
-                string teacherId = "";
+
+                int index = rand.Next(randomTeacher.Count);
+                string teacherId = randomTeacher[index];
+
+                //string teacherId = "";
                 
-                teacherId = teachers.FirstOrDefault().TeacherId;
+                //teacherId = teachers.FirstOrDefault();
 
                 var group = new Group
                 {
@@ -107,6 +115,12 @@ namespace StudentAttandance.Pages.Admin
                 };
 
                 _groupRepository.AddGroup(group);
+
+                randomTeacher.RemoveAt(index);
+                if (!randomTeacher.Any())
+                {
+                    randomTeacher.AddRange(teachers);
+                }
 
                 var currentGroup = _groupRepository.GetGroupsByConditions(groupName, Convert.ToInt32(addGroupValidation.TermId), Convert.ToInt32(addGroupValidation.CourseId)).FirstOrDefault();
                 //Take 1 number of students and stuff it into a class
