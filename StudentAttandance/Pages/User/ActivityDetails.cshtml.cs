@@ -18,7 +18,7 @@ namespace StudentAttandance.Pages.User
         {
             this.attandanceRepository = attandanceRepository;
         }
-        public IActionResult OnGet(string attendanceId)
+        public IActionResult OnGet(string sessionId, string studentId)
         {
             var account = HttpContext.Session.GetString("Account");
             if (account != null)
@@ -26,7 +26,7 @@ namespace StudentAttandance.Pages.User
                 Account? acc = JsonConvert.DeserializeObject<Account>(account.ToString());
                 if (acc.RoleId == 3)
                 {
-                    Attandance = attandanceRepository.GetAttandanceById(Int32.Parse(attendanceId));
+                    Attandance = attandanceRepository.GetAttandanceById(Int32.Parse(sessionId), studentId);
                     return Page();
                 }
             }
