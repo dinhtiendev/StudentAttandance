@@ -14,6 +14,12 @@ namespace StudentAttandanceLibrary.Repositories.Implements
     {
         StudentAttendanceManagementContext context = new StudentAttendanceManagementContext();
 
+        public void AddSessions(List<Session> sessions)
+        {
+            context.AddRange(sessions);
+            context.SaveChanges();
+        }
+
         public IQueryable<SessionDto> GetAllSessionsByCondition(string studentId, int termId, int courseId)
         {
             var query = from s in context.Sessions

@@ -27,6 +27,10 @@ builder.Services.AddTransient<ITermRepository, TermRepository>();
 builder.Services.AddTransient<IGroupRepository, GroupRepository>();
 builder.Services.AddTransient<ISessionRepository, SessionRepository>();
 builder.Services.AddTransient<IAttendanceRepository, AttendanceRepository>();
+builder.Services.AddTransient<IStudentGroupRepository, StudentGroupRepository>();
+builder.Services.AddTransient<IRoomRepository, RoomRepository>();
+builder.Services.AddTransient<ITimeSlotRepository, TimeSlotRepository>();
+
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(10);

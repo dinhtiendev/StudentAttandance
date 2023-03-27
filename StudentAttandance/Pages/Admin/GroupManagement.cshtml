@@ -1,0 +1,137 @@
+﻿@page "/groupmanagement"
+@using Newtonsoft.Json
+@using StudentAttandanceLibrary.ModelDtos
+@using StudentAttandanceLibrary.Models
+@model StudentAttandance.Pages.Admin.GroupManagementModel
+@{
+    var account = HttpContext.Session.GetString("Account");
+    var terms = ViewBag.Terms as List<Term>;
+    var courses = ViewBag.Courses as List<Course>;
+    var groups = ViewBag.Groups as List<GroupDto>;
+    int currentT = ViewBag.CurrentTerm;
+    int currentC = ViewBag.CurrentCourse;
+}
+<div class="row bg-light p-3">
+    <div class="col-md-4 d-flex justify-content-start">
+        <h6><a class="text-decoration-none" href="/home">Home</a><span> | Group List</span></h6>
+    </div>
+    <div class="col-md-8 d-flex justify-content-end">
+        <a class="text-decoration-none" href="#">
+            <span class="private-information text-light p-1 rounded-2"> @(JsonConvert.DeserializeObject<Account>(account.ToString()).AccountId)</span>
+        </a> &nbsp;|&nbsp;
+        <a class="text-decoration-none" href="#">
+            <span class="private-information text-light p-1 rounded-2">logout</span>
+        </a> &nbsp;|&nbsp;
+        <a class="text-decoration-none">
+            <span class="private-information text-light p-1 rounded-2">
+                CAMPUS:
+                FPTU-Hòa Lạc
+            </span>
+        </a>
+    </div>
+</div>
+<div class="row my-3">
+    <div class="row">
+        <div class="col-md-2">
+            <h5>Total Groups: @groups.Count</h5>
+        </div>
+        <div class="col-md-4">
+            <form id="filter" method="get" class="row">
+                <div class="col-md-6">
+                    <select id="tSelected" name="termId" class="form-select form-select-sm"
+                            aria-label=".form-select-sm example" style="width: 150px;">
+                        @foreach (var item in terms)
+                        {
+                            <option selected='@((currentT == item.TermId)?"selected":null)' value="@item.TermId">@item.TermName</option>
+                        }
+                    </select>
+                    @*</form>*@
+                </div>
+                <div class="col-md-6">
+                    @*<form id="filterCourse" method="get">*@
+                    <select id="cSelected" name="courseId" class="form-select form-select-sm"
+                            aria-label=".form-select-sm example" style="width: 200px;">
+                        @foreach (var item in courses)
+                        {
+                            <option selected='@((currentC == item.CourseId)?"selected":null)' value="@item.CourseId">@item.CourseName</option>
+                        }
+                    </select>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-3">
+        </div>
+        <div class="col-md-3">
+            <div class="mb-3">
+                <div class="row">
+                    <div class="col-md-7">
+                    </div>
+                    <div class="col-md-5">
+                        <a href="/addgroup" class="btn btn-success">Add Groups</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @if (groups.Count() == 0)
+    {
+        <h4 class="text-center my-4" style="color: red;">List is Empty</h4>
+    }
+    else
+    {
+        <table class="table table-bordered">
+            <thead style="background-color: #6b90da;">
+                <tr class="align-middle">
+                    <th class="fw-normal ">NO</th>
+                    <th class="fw-normal">GROUP NAME</th>
+                    <th class="fw-normal">TEACHER</th>
+                    <th class="fw-normal">NUMBER OF SLOTS</th>
+                    <th class="fw-normal">TOTAL STUDENTS</th>
+                    <th class="fw-normal">ACTION</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int index = 0;
+                }
+                @foreach (var item in groups)
+                {
+                    index++;
+                    <tr>
+                        <td>@index</td>
+                        <td>@item.GroupName</td>
+                        <td>@item.Teacher</td>
+                        <td>
+                            @item.NumberSlots
+                        </td>
+                        <td>
+                            @item.TotalStudents
+                        </td>
+                        <td>
+                            <a class="btn btn-danger text-decoration-none text-center" asp-page-handler="Delete" asp-route-groupid="@item.GroupId">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+<script>
+    var selectElement1 = document.getElementById("tSelected");
+    var selectElement2 = document.getElementById("cSelected");
+
+    selectElement1.addEventListener("change", function() {
+        var formElement1 = document.getElementById("filter");
+        formElement1.submit();
+    });
+
+    selectElement2.addEventListener("change", function() {
+        var formElement1 = document.getElementById("filter");
+        formElement1.submit();
+    });
+
+            //selectElement2.addEventListener("change", function() {
+            //    var formElement2 = document.getElementById("filterCourse");
+            //    formElement2.submit();
+            //});
+</script>

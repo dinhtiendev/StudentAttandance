@@ -27,7 +27,7 @@ namespace StudentAttandance.Pages.Admin
             _studentRepository = studentRepository;
         }
 
-        public IActionResult OnGet(string message)
+        public IActionResult OnGet(string message, string k)
         {
             if (HttpContext.Session.GetString("Account") != null)
             {
@@ -36,8 +36,16 @@ namespace StudentAttandance.Pages.Admin
                 if (account.RoleId == 1)
                 {
                     ViewData["Message"] = message;
-                    ViewData["StudentList"] = _studentRepository.GetAllStudents().ToList();
-                    ViewData["TotalStudents"] = _studentRepository.GetAllStudents().ToList().Count();
+                    var listK = DBHelper.GetAllK(_studentRepository.GetStudents().ToList());
+                    ViewData["ListK"] = listK;
+                    if (k == null)
+                    {
+                        k = listK.Last().ToString();
+                    }
+                    ViewData["K"] = k;
+                    TempData["K"] = k;
+                    ViewData["StudentList"] = _studentRepository.GetStudentsByK(k).ToList();
+                    ViewData["TotalStudents"] = _studentRepository.GetStudentsByK(k).ToList().Count();
                     return Page();
                 }
             }
@@ -50,7 +58,7 @@ namespace StudentAttandance.Pages.Admin
 
             if (!ModelState.IsValid)
             {
-                return OnGet(null);
+                return OnGet(null, (string)ViewData["K"]);
             }
 
             var sheetTemplate = _excelSerivce.GetSheetFromTemplate("StudentList.xlsx");
@@ -60,7 +68,7 @@ namespace StudentAttandance.Pages.Admin
             var checkHeader = _excelSerivce.CheckHeader(columnsTemplate, columnsUpload);
             if (!checkHeader)
             {
-                return OnGet("The file upload header does not match the template !!!");
+                return OnGet("The file upload header does not match the template !!!", (string)ViewData["K"]);
             }
 
             List<Student> students = _studentRepository.GetStudents();
@@ -74,12 +82,12 @@ namespace StudentAttandance.Pages.Admin
                 s.FullName = row[0].ToString().Trim();
                 if (string.IsNullOrWhiteSpace(s.FullName))
                 {
-                    return OnGet("FullName is required !!!");
+                    return OnGet("FullName is required !!!", (string)ViewData["K"]);
                 }
                 s.StudentId = generate.GenerateStudentCode(students, listS);
                 if (s.StudentId == null)
                 {
-                    return OnGet("The number of students this time is enough !!!");
+                    return OnGet("The number of students this time is enough !!!", (string)ViewData["K"]);
                 }
                 s.UserName = generate.GenerateDisplayName(row[0].ToString().Trim()) + s.StudentId;
                 s.Image = null;
@@ -90,12 +98,12 @@ namespace StudentAttandance.Pages.Admin
                 }
                 catch (Exception e)
                 {
-                    return OnGet("Date is not a valid format!!!");
+                    return OnGet("Date is not a valid format!!!", (string)ViewData["K"]);
                 }
 
                 if (!row[2].ToString().Trim().Equals("0") && !row[2].ToString().Trim().Equals("1"))
                 {
-                    return OnGet("Gender must be 0 or 1 !!!");
+                    return OnGet("Gender must be 0 or 1 !!!", (string)ViewData["K"]);
                 }
                 s.Gender = (row[2].ToString().Trim() == "0") ? false : true;
 
@@ -110,20 +118,21 @@ namespace StudentAttandance.Pages.Admin
                 a.Status = true;
                 listA.Add(a);
             }
+            //string currentK = (string)TempData["K"];
             _studentRepository.AddStudents(listA, listS);
-            return RedirectToPage();
+            return RedirectToAction("/studentmanagement", new { Message = "", K = (string)TempData["K"] });
         }
 
         public IActionResult OnGetDelete(string id)
         {
             _studentRepository.DeleteStudent(id);
-            return RedirectToPage();
+            return RedirectToAction("/studentmanagement", new { Message = "", K = (string)TempData["K"] });
         }
 
         public IActionResult OnGetRestore(string id)
         {
             _studentRepository.RestoreStudent(id);
-            return RedirectToPage();
+            return RedirectToAction("/studentmanagement", new { Message = "", K = (string)TempData["K"] });
         }
     }
 }
