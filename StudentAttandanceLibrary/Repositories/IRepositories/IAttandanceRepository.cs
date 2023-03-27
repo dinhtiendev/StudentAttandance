@@ -13,7 +13,7 @@ namespace StudentAttandanceLibrary.Repositories.IRepositories
         public List<AttandanceDto> GetAttandancesByWeekAndTeacherId(DateTime startDate, DateTime endDate, String TeacherId);
         public List<AttandanceDto> GetAttandancesBySesionId(int sesionId);
         public List<AttandanceDto> NewAttandancesBySesionId(int sesionId);
-        public AttandanceDto GetAttandanceById(int id);
+        public AttandanceDto GetAttandanceById(int sessionId, string studentId);
         public void UpdateAttandances(Dictionary<int, bool> attandances);
     }
 }

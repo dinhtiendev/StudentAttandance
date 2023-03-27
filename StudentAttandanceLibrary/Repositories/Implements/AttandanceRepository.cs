@@ -13,7 +13,7 @@ namespace StudentAttandanceLibrary.Repositories.Implements
     {
         StudentAttendanceManagementContext context = new StudentAttendanceManagementContext();
 
-        public AttandanceDto GetAttandanceById(int id)
+        public AttandanceDto GetAttandanceById(int sessionId, string studentId)
         {
             var query = (from session in context.Sessions
                          join attendance in context.Attendances
@@ -28,7 +28,7 @@ namespace StudentAttandanceLibrary.Repositories.Implements
                          on session.TeacherId equals teacher.TeacherId
                          join course in context.Courses
                          on groups.CourseId equals course.CourseId
-                         where attendance.AttendanceId == id
+                         where attendance.SessionId == sessionId && attendance.StudentId == studentId
                          select new AttandanceDto
                          {
                              SessionId = session.SessionId,
@@ -43,6 +43,35 @@ namespace StudentAttandanceLibrary.Repositories.Implements
                              Course = new Course { CourseId = course.CourseId, CourseCode = course.CourseCode, CourseName = course.CourseName },
                              Present = attendance.Present
                          }).FirstOrDefault();
+            if (query == null)
+            {
+                query = (from session in context.Sessions
+                         join timeSlot in context.TimeSlots
+                         on session.TimeSlotId equals timeSlot.TimeSlotId
+                         join room in context.Rooms
+                         on session.RoomId equals room.RoomId
+                         join groups in context.Groups
+                         on session.GroupId equals groups.GroupId
+                         join teacher in context.Teachers
+                         on session.TeacherId equals teacher.TeacherId
+                         join course in context.Courses
+                         on groups.CourseId equals course.CourseId
+                         join student in context.StudentGroups
+                         on groups.GroupId equals student.GroupId
+                         where session.SessionId == sessionId && student.StudentId == studentId
+                         select new AttandanceDto
+                         {
+                             SessionId = session.SessionId,
+                             Date = session.Date,
+                             Index = session.Index,
+                             RoomName = room.RoomName,
+                             Attanded = session.Attanded,
+                             TeacherName = teacher.UserName,
+                             TimeSlot = new TimeSlot { TimeSlotId = timeSlot.TimeSlotId, Description = timeSlot.Description },
+                             Group = new Group { GroupName = groups.GroupName, GroupId = groups.GroupId },
+                             Course = new Course { CourseId = course.CourseId, CourseCode = course.CourseCode, CourseName = course.CourseName }
+                         }).FirstOrDefault();
+            }
             return query;
         }
 
@@ -184,6 +213,7 @@ namespace StudentAttandanceLibrary.Repositories.Implements
                          {
                              SessionId = session.SessionId,
                              AttendanceId = attendance.AttendanceId,
+                             Student = new Student { StudentId = studentId },
                              Date = session.Date,
                              Index = session.Index,
                              RoomName = room.RoomName,
@@ -194,6 +224,34 @@ namespace StudentAttandanceLibrary.Repositories.Implements
                              Course = new Course { CourseId = course.CourseId, CourseCode = course.CourseCode, CourseName = course.CourseName },
                              Present = attendance.Present
                          }).ToList();
+            var query1 = (from session in context.Sessions
+                         join timeSlot in context.TimeSlots
+                         on session.TimeSlotId equals timeSlot.TimeSlotId
+                         join room in context.Rooms
+                         on session.RoomId equals room.RoomId
+                         join groups in context.Groups
+                         on session.GroupId equals groups.GroupId
+                         join teacher in context.Teachers
+                         on session.TeacherId equals teacher.TeacherId
+                         join course in context.Courses
+                         on groups.CourseId equals course.CourseId
+                         join student in context.StudentGroups
+                         on groups.GroupId equals student.GroupId
+                         where student.StudentId == studentId && session.Date >= startDate && session.Date <= endDate && session.Attanded == false
+                         select new AttandanceDto
+                         {
+                             SessionId = session.SessionId,
+                             Student = new Student { StudentId = studentId },
+                             Date = session.Date,
+                             Index = session.Index,
+                             RoomName = room.RoomName,
+                             Attanded = session.Attanded,
+                             TeacherName = teacher.UserName,
+                             TimeSlot = new TimeSlot { TimeSlotId = timeSlot.TimeSlotId, Description = timeSlot.Description },
+                             Group = new Group { GroupName = groups.GroupName, GroupId = groups.GroupId },
+                             Course = new Course { CourseId = course.CourseId, CourseCode = course.CourseCode, CourseName = course.CourseName }
+                         }).ToList();
+            query.AddRange(query1);
             return query;
         }
 
