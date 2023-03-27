@@ -57,6 +57,13 @@ namespace StudentAttandance.Pages.Admin
 
         public IActionResult OnPost(AddGroupValidation addGroupValidation)
         {
+            var checkExist = _groupRepository.GetGroupsByTermAndCourse(addGroupValidation.TermId, addGroupValidation.CourseId).ToList();
+            if (checkExist.Any())
+            {
+                ViewData["Message"] = "Duplicate !!!";
+                return OnGet();
+            }
+
             var k = addGroupValidation.KS;
             var students = _studentRepository.GetStudentsByK(k);
 
@@ -67,7 +74,9 @@ namespace StudentAttandance.Pages.Admin
             int groupIndex = 0;
             int rowSkip = 0;
 
-            var ignouTeachers = new List<string>();
+            int numberGroupsInTerm = _groupRepository.NumberGroupsInTerm(k.Substring(1,2),addGroupValidation.TermId);
+            int status = DBHelper.NumberGroupsInTerm(numberGroupsInTerm);
+
             var addSessions = new List<Session>();
             var addStudentGroups = new List<StudentGroup>();
 
@@ -78,13 +87,9 @@ namespace StudentAttandance.Pages.Admin
                 groupIndex++;
                 string groupName = "SE" + k.Substring(1, 2) + ((groupIndex >= 1 && groupIndex <= 9) ? ("0" + groupIndex) : groupIndex);
                 string teacherId = "";
-                //if (ignouTeachers.Count() == 0)
-                //{
+                
                 teacherId = teachers.FirstOrDefault().TeacherId;
-                //    ignouTeachers.Add(teacherId);
-                //} else
-                //{
-                //}
+
                 var group = new Group
                 {
                     TeacherId = teacherId,
@@ -92,6 +97,7 @@ namespace StudentAttandance.Pages.Admin
                     TermId = Convert.ToInt32(addGroupValidation.TermId),
                     CourseId = Convert.ToInt32(addGroupValidation.CourseId),
                 };
+
                 _groupRepository.AddGroup(group);
 
                 var currentGroup = _groupRepository.GetGroupsByConditions(groupName, Convert.ToInt32(addGroupValidation.TermId), Convert.ToInt32(addGroupValidation.CourseId)).FirstOrDefault();
@@ -115,7 +121,7 @@ namespace StudentAttandance.Pages.Admin
                 var room = _roomRepository.GetRooms().FirstOrDefault();
                 for (int o = 0; o < addGroupValidation.NumberSlot; o++)
                 {
-                    var x = DBHelper.GetDateForSession(addGroupValidation.DateStart, currentDate, newDate, groupIndex, o);
+                    var x = DBHelper.GetDateForSession(addGroupValidation.DateStart, currentDate, newDate, groupIndex, o, status);
                     var session = new Session
                     {
                         GroupId = currentGroup.GroupId,
@@ -123,7 +129,7 @@ namespace StudentAttandance.Pages.Admin
                         Index = o + 1,
                         RoomId = room.RoomId,
                         TeacherId = teacherId,
-                        TimeSlotId = DBHelper.GetTimeSlot(groupIndex),
+                        TimeSlotId = DBHelper.GetTimeSlot(groupIndex, status),
                         Date = x,
                     };
                     addSessions.Add(session);
@@ -134,7 +140,7 @@ namespace StudentAttandance.Pages.Admin
             _studentGroupRepository.AddStudentGroups(addStudentGroups);
             _sessionRepository.AddSessions(addSessions);
 
-            return RedirectToAction("/groupmanagement");
+            return RedirectToPage("/admin/groupmanagement");
         }
     }
 }

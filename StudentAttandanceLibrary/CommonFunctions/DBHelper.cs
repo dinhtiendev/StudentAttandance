@@ -9,7 +9,6 @@ namespace StudentAttandanceLibrary.CommonFunctions
 {
     public class DBHelper
     {
-
         public static List<string> GetAllK(List<Student> students)
         {
             List<string> listK = new List<string>();
@@ -25,26 +24,36 @@ namespace StudentAttandanceLibrary.CommonFunctions
             return listK.OrderBy(x => Int32.Parse(x.Substring(1, 2))).ToList();
         }
 
-        public static DateTime GetDateForSession(DateTime dateStart, DateTime currentDate, DateTime newDate, int numberClass, int index)
+        public static DateTime GetDateForSession(DateTime dateStart, DateTime currentDate, DateTime newDate, int numberClass, int index, int status)
         {
             if (index == 0)
             {
-                if (numberClass % 2 == 0)
+                if (status == 1 || status == 3)
                 {
-                    currentDate = dateStart.AddDays(1);
+                    if (numberClass % 2 == 0)
+                    {
+                        currentDate = dateStart.AddDays(1);
+                    }
+                    else
+                    {
+                        currentDate = dateStart;
+                    }
+                    return currentDate;
                 }
-                else
-                {
-                    currentDate = dateStart;
-                }
-                return currentDate;
-            }
 
-            //if (currentDate.DayOfWeek.ToString().Equals("Saturday"))
-            //{
-            //    newDate = currentDate.AddDays(2);
-            //}
-            //else
+                if (status == 2 || status == 4)
+                {
+                    if (numberClass % 2 == 0)
+                    {
+                        currentDate = dateStart;
+                    }
+                    else
+                    {
+                        currentDate = dateStart.AddDays(1);
+                    }
+                    return currentDate;
+                }
+            }
 
             if (currentDate.DayOfWeek.ToString().Equals("Friday") || currentDate.DayOfWeek.ToString().Equals("Saturday"))
             {
@@ -60,12 +69,6 @@ namespace StudentAttandanceLibrary.CommonFunctions
 
         public static int GetTimeSlot(int numberClass)
         {
-            //var slot1 = new int[] { 1, 2 };
-            //var slot2 = new int[] { 3, 4 };
-            //var slot3 = new int[] { 5, 6 };
-            //var slot4 = new int[] { 7, 8 };
-            //var slot5 = new int[] { 9, 10 };
-            //var slot6 = new int[] { 11, 12 };
             switch (numberClass)
             {
                 case 1:
@@ -91,5 +94,107 @@ namespace StudentAttandanceLibrary.CommonFunctions
             }
         }
 
+        public static int NumberGroupsInTerm(int number)
+        {
+            switch (number)
+            {
+                case 0:
+                    return 1;
+                case 1:
+                    return 2;
+                case 2:
+                    return 3;
+                case 3:
+                    return 4;
+                default:
+                    return 0;
+            }
+        }
+
+        public static int GetTimeSlot(int numberClass, int status)
+        {
+            var slot1 = new List<int>();
+            var slot2 = new List<int>();
+            var slot3 = new List<int>();
+            var slot4 = new List<int>();
+            var slot5 = new List<int>();
+            var slot6 = new List<int>();
+
+            ClearList(slot1, slot2, slot3, slot4, slot5, slot6);
+
+            if (status == 1 || status == 3)
+            {
+                AddFirst(slot1, slot2, slot3, slot4, slot5, slot6);
+            }
+
+            if (status == 2 || status == 4)
+            {
+                AddSecond(slot1, slot2, slot3, slot4, slot5, slot6);
+            }
+
+            if (slot1.Contains(numberClass))
+            {
+                return 1;
+            }
+            if (slot2.Contains(numberClass))
+            {
+                return 2;
+            }
+            if (slot3.Contains(numberClass))
+            {
+                return 3;
+            }
+            if (slot4.Contains(numberClass))
+            {
+                return 4;
+            }
+            if (slot5.Contains(numberClass))
+            {
+                return 5;
+            }
+            if (slot6.Contains(numberClass))
+            {
+                return 6;
+            }
+            return 0;
+        }
+
+        public static void AddFirst(List<int> list1, List<int> list2, List<int> list3, List<int> list4, List<int> list5, List<int> list6)
+        {
+            AddElements(list1, 1, 2);
+            AddElements(list2, 3, 4);
+            AddElements(list3, 5, 6);
+            AddElements(list4, 7, 8);
+            AddElements(list5, 9, 10);
+            AddElements(list6, 11, 12);
+        }
+
+        public static void AddSecond(List<int> list1, List<int> list2, List<int> list3, List<int> list4, List<int> list5, List<int> list6)
+        {
+            AddElements(list1, 3, 4);
+            AddElements(list2, 1, 2);
+            AddElements(list3, 7, 8);
+            AddElements(list4, 5, 6);
+            AddElements(list5, 11, 12);
+            AddElements(list6, 9, 10);
+        }
+
+        public static void AddElements(List<int> list, int param1, int param2)
+        {
+            list.Add(param1);
+            list.Add(param2);
+        }
+
+        public static void ClearList(List<int> list1, List<int> list2, List<int> list3, List<int> list4, List<int> list5, List<int> list6)
+        {
+            list1.Clear();
+            list2.Clear();
+            list3.Clear();
+            list4.Clear();
+            list5.Clear();
+            list6.Clear();
+        }
     }
+
+
 }

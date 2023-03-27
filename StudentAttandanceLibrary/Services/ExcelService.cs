@@ -33,31 +33,6 @@ namespace StudentAttandanceLibrary.Services
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
-            }
-            finally
-            {
-                memoryStream.Close();
-            }
-            return null;
-        }
-
-        public DataTable GetSheetFromStream(MemoryStream memoryStream)
-        {
-            try
-            {
-                var reader = ExcelReaderFactory.CreateReader(memoryStream);
-                var result = GetDataSet(reader);
-                var table = result.Tables;
-                var sheet = table[0];
-                return sheet;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            }
-            finally
-            {
                 memoryStream.Close();
             }
             return null;
@@ -83,7 +58,6 @@ namespace StudentAttandanceLibrary.Services
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
                 return null;
             }
         }
@@ -109,7 +83,6 @@ namespace StudentAttandanceLibrary.Services
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
                 return false;
             }
         }

@@ -11,6 +11,8 @@ namespace StudentAttandanceLibrary.Repositories.IRepositories
 
         public IQueryable<Group> GetGroupsByConditions(string className, int termId, int courseId);
 
+        public int NumberGroupsInTerm(string className, int termId);
+
         public Group GetGroup(int id);
 
         public void AddGroup(Group group);
