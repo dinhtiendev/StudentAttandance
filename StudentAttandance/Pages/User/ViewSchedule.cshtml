@@ -97,7 +97,7 @@
                                             if (acc.RoleId == 3)
                                             {
                                                 <p>
-                                                    <a href="/activityDetails?attendanceId=@session.AttendanceId">@session.Course.CourseCode</a><br>
+                                                    <a href="/activityDetails?sessionId=@session.SessionId&studentId=@session.Student.StudentId">@session.Course.CourseCode</a><br>
                                                     at @session.RoomName<br>
                                                     (
                                                     @if (!session.Attanded ?? true)
