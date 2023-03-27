@@ -23,7 +23,7 @@ namespace StudentAttandanceLibrary.Services
             MemoryStream memoryStream = new MemoryStream();
             try
             {
-                file.CopyToAsync(memoryStream).ConfigureAwait(false);
+                file.CopyToAsync(memoryStream);
                 memoryStream.Position = 0;
                 var reader = ExcelReaderFactory.CreateReader(memoryStream);
                 var result = GetDataSet(reader);
