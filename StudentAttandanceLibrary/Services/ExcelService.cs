@@ -33,31 +33,6 @@ namespace StudentAttandanceLibrary.Services
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
-            }
-            finally
-            {
-                memoryStream.Close();
-            }
-            return null;
-        }
-
-        public DataTable GetSheetFromStream(MemoryStream memoryStream)
-        {
-            try
-            {
-                var reader = ExcelReaderFactory.CreateReader(memoryStream);
-                var result = GetDataSet(reader);
-                var table = result.Tables;
-                var sheet = table[0];
-                return sheet;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            }
-            finally
-            {
                 memoryStream.Close();
             }
             return null;
@@ -75,6 +50,7 @@ namespace StudentAttandanceLibrary.Services
                     return null;
                 }
                 var numberColumns = row.Table.Columns.Count;
+                //Add each value of columns to list
                 for (int i = 0; i < numberColumns; i++)
                 {
                     columns.Add(Convert.ToString(dataTable!.Rows[0][i].ToString().Trim()));
@@ -83,7 +59,6 @@ namespace StudentAttandanceLibrary.Services
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
                 return null;
             }
         }
@@ -92,14 +67,19 @@ namespace StudentAttandanceLibrary.Services
         {
             try
             {
+                //Check columns file upload is null
                 if (columnsUpload == null)
                 {
                     return false;
                 }
+
+                //Check number of columns file upload and file template
                 if (columnsTemplate.Count != columnsUpload.Count)
                 {
                     return false;
                 }
+
+                //Check value of each columns of file upload and file template
                 var checkHeader = columnsUpload.SequenceEqual(columnsTemplate);
                 if (!checkHeader)
                 {
@@ -109,7 +89,6 @@ namespace StudentAttandanceLibrary.Services
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
                 return false;
             }
         }

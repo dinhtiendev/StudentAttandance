@@ -11,20 +11,13 @@ namespace StudentAttandanceLibrary.Validation.ModelValidation
     {
         public DateTime DateStart { get; set; }
 
-        [Range(1, 30)]
         public int? NumberSlot { get; set; }
 
         public string KS { get; set; }
 
-        //public int? TeacherId { get; set; }
-
         public int TermId { get; set; }
 
         public int CourseId { get; set; }
-
-        //public int? RoomId { get; set; }
-
-        //public int SlotId { get; set; }
 
     }
 }

@@ -40,36 +40,18 @@ namespace StudentAttandanceLibrary.Repositories.Implements
             var query = from g in context.Groups
                         join t in context.Teachers on g.TeacherId equals t.TeacherId
                         join gs in context.StudentGroups on g.GroupId equals gs.GroupId
-                        join s in context.Sessions on g.GroupId equals s.SessionId
-                        where g.TermId == termId && g.CourseId == courseId
-                        group s by new { g.GroupId, g.GroupName, t.UserName } into groupResult
+                        join s in context.Sessions on g.GroupId equals s.GroupId
+                        where g.TermId == termId && g.CourseId == courseId && s.Index == 1
+                        group s by new { g.GroupId, g.GroupName, t.UserName, s.Date } into groupResult
                         select new GroupDto
                         {
                             GroupId = groupResult.Key.GroupId,
                             GroupName = groupResult.Key.GroupName,
                             Teacher = groupResult.Key.UserName,
-                            NumberSlots = groupResult.Count(),
+                            DateStart = groupResult.Key.Date,
+                            NumberSlots = context.Sessions.Count(x => x.GroupId == groupResult.Key.GroupId),
                             TotalStudents = context.StudentGroups.Count(x => x.GroupId == groupResult.Key.GroupId)
                         };
-            //var query = (from g in context.Groups
-            //            join t in context.Teachers
-            //            on g.TeacherId equals t.TeacherId
-            //            join s in context.Sessions
-            //            on g.GroupId equals s.GroupId
-            //            join st in context.StudentGroups
-            //            on g.GroupId equals st.GroupId
-            //            //join r in context.Rooms
-            //            //on s.RoomId equals r.RoomId
-            //            where g.TermId == termId && g.CourseId == courseId
-            //            select new GroupDto
-            //            {
-            //                GroupId = g.GroupId,
-            //                GroupName = g.GroupName,
-            //                Teacher = t.TeacherId,
-            //                //Room = r.RoomName,
-            //                NumberSlots = context.Sessions.Where(x => x.GroupId == g.GroupId).Count(),
-            //                TotalStudents = context.Sessions.Where(x => x.GroupId == g.GroupId).Count(),
-            //            }).Distinct();
             return query;
         }
 
@@ -88,6 +70,15 @@ namespace StudentAttandanceLibrary.Repositories.Implements
         {
             var query = context.Groups.Where(x => x.TermId == termId && x.CourseId == courseId);
             return query;
+        }
+
+        public int NumberGroupsInTerm(string className, int termId)
+        {
+            var query = context.Groups
+                .Where(g => g.TermId == termId && g.GroupName.Substring(2,2).Contains(className))
+            .Select(g => g.CourseId)
+            .Distinct();
+            return query.ToList().Count;
         }
     }
 }

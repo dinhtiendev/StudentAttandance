@@ -10,6 +10,7 @@
     //var rooms = ViewData["Rooms"] as List<Room>;
     //var slots = ViewData["Slots"] as List<TimeSlot>;
     var ks = ViewData["KS"] as List<string>;
+    var message = ViewData["Message"] as string;
 }
 <div class="row bg-light p-3">
     <div class="col-md-4 d-flex justify-content-start">
@@ -43,7 +44,12 @@
 </div>
 <div class="my-4">
 </div>
+@if (message != null)
+{
+    <h4 class="text-center my-4" style="color: red;">@message</h4>
+}
 <form method="post" enctype="multipart/form-data">
+
     <div class="form-group row">
         <label class="col-sm-2 col-form-label">Date Start:</label>
         <div class="col-sm-4">
@@ -53,7 +59,7 @@
     <div class="form-group row">
         <label class="col-sm-2 col-form-label">Number of Slot:</label>
         <div class="col-sm-4">
-            <input name="AddGroupValidation.NumberSlot" min="1" type="number" class="form-control">
+            <input name="AddGroupValidation.NumberSlot" value="1" min="1" max="30" type="number" class="form-control">
         </div>
     </div>
     <div class="form-group row">
@@ -70,17 +76,17 @@
         </div>
     </div>
     @*<div class="form-group row">
-        <div class="col-sm-2">
-            <label class="col-form-label">Teacher: </label>
-        </div>
-        <div class="col-sm-4">
-            <select name="AddGroupValidation.TeacherId" class="form-select form-select-dm" aria-label=".form-select-dm example">
-                 @foreach (var i in teachers)
-                {
-                    <option value="@i.TeacherId">@i.UserName</option>
-                }
-            </select>
-        </div>
+    <div class="col-sm-2">
+    <label class="col-form-label">Teacher: </label>
+    </div>
+    <div class="col-sm-4">
+    <select name="AddGroupValidation.TeacherId" class="form-select form-select-dm" aria-label=".form-select-dm example">
+    @foreach (var i in teachers)
+    {
+    <option value="@i.TeacherId">@i.UserName</option>
+    }
+    </select>
+    </div>
     </div>*@
     <div class="form-group row">
         <div class="col-sm-2">
@@ -88,7 +94,7 @@
         </div>
         <div class="col-sm-4">
             <select name="AddGroupValidation.TermId" class="form-select form-select-dm" aria-label=".form-select-dm example">
-                 @foreach (var i in terms)
+                @foreach (var i in terms)
                 {
                     <option value="@i.TermId">@i.TermName</option>
                 }
@@ -101,7 +107,7 @@
         </div>
         <div class="col-sm-4">
             <select name="AddGroupValidation.CourseId" class="form-select form-select-dm" aria-label=".form-select-dm example">
-                 @foreach (var i in courses)
+                @foreach (var i in courses)
                 {
                     <option value="@i.CourseId">@i.CourseName</option>
                 }
@@ -109,30 +115,30 @@
         </div>
     </div>
     @*<div class="form-group row">
-        <div class="col-sm-2">
-            <label class="col-form-label">Room: </label>
-        </div>
-        <div class="col-sm-4">
-            <select name="AddGroupValidation.RoomId" class="form-select form-select-dm" aria-label=".form-select-dm example">
-                 @foreach (var i in rooms)
-                {
-                    <option value="@i.RoomId">@i.RoomName</option>
-                }
-            </select>
-        </div>
+    <div class="col-sm-2">
+    <label class="col-form-label">Room: </label>
+    </div>
+    <div class="col-sm-4">
+    <select name="AddGroupValidation.RoomId" class="form-select form-select-dm" aria-label=".form-select-dm example">
+    @foreach (var i in rooms)
+    {
+    <option value="@i.RoomId">@i.RoomName</option>
+    }
+    </select>
+    </div>
     </div>
     <div class="form-group row">
-        <div class="col-sm-2">
-            <label class="col-form-label">Slot: </label>
-        </div>
-        <div class="col-sm-4">
-            <select name="AddGroupValidation.SlotId" class="form-select form-select-dm" aria-label=".form-select-dm example">
-                 @foreach (var i in slots)
-                {
-                    <option value="@i.TimeSlotId">@i.Description</option>
-                }
-            </select>
-        </div>
+    <div class="col-sm-2">
+    <label class="col-form-label">Slot: </label>
+    </div>
+    <div class="col-sm-4">
+    <select name="AddGroupValidation.SlotId" class="form-select form-select-dm" aria-label=".form-select-dm example">
+    @foreach (var i in slots)
+    {
+    <option value="@i.TimeSlotId">@i.Description</option>
+    }
+    </select>
+    </div>
     </div>*@
     <button type="submit" class="btn btn-success">Add</button>
 </form>
