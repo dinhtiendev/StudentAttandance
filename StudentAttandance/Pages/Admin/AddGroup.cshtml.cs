@@ -67,7 +67,7 @@ namespace StudentAttandance.Pages.Admin
             var students = _studentRepository.GetStudentsByK(k);
 
             int totalStudentInK = students.ToList().Count();
-            int totalStudentsInGroup = 10;
+            int totalStudentsInGroup = 20;
             //Round number of classes
             int totalGroup = (int)Math.Ceiling((double)totalStudentInK / totalStudentsInGroup);
 
