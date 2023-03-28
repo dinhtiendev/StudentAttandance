@@ -27,7 +27,7 @@ namespace StudentAttandance.Pages.Admin
             _studentRepository = studentRepository;
         }
 
-        public IActionResult OnGet(string message, string k)
+        public IActionResult OnGet(string k)
         {
             if (HttpContext.Session.GetString("Account") != null)
             {
@@ -35,7 +35,7 @@ namespace StudentAttandance.Pages.Admin
 
                 if (account.RoleId == 1)
                 {
-                    ViewData["Message"] = message;
+                    //ViewData["Message"] = message;
                     var listK = DBHelper.GetAllK(_studentRepository.GetStudents().ToList());
                     ViewData["ListK"] = listK;
                     if (k == null)
@@ -58,7 +58,7 @@ namespace StudentAttandance.Pages.Admin
 
             if (!ModelState.IsValid)
             {
-                return OnGet(null, (string)ViewData["K"]);
+                return OnGet((string)ViewData["K"]);
             }
 
             var sheetTemplate = _excelSerivce.GetSheetFromTemplate("StudentList.xlsx");
@@ -68,7 +68,8 @@ namespace StudentAttandance.Pages.Admin
             var checkHeader = _excelSerivce.CheckHeader(columnsTemplate, columnsUpload);
             if (!checkHeader)
             {
-                return OnGet("The file upload header does not match the template !!!", (string)ViewData["K"]);
+                ViewData["Message"] = "The file upload header does not match the template !!!";
+                return OnGet((string)ViewData["K"]);
             }
 
             List<Student> students = _studentRepository.GetStudents();
@@ -82,12 +83,14 @@ namespace StudentAttandance.Pages.Admin
                 s.FullName = row[0].ToString().Trim();
                 if (string.IsNullOrWhiteSpace(s.FullName))
                 {
-                    return OnGet("FullName is required !!!", (string)ViewData["K"]);
+                    ViewData["Message"] = "FullName is required !!!";
+                    return OnGet((string)ViewData["K"]);
                 }
                 s.StudentId = generate.GenerateStudentCode(students, listS);
                 if (s.StudentId == null)
                 {
-                    return OnGet("The number of students this time is enough !!!", (string)ViewData["K"]);
+                    ViewData["Message"] = "The number of students this time is enough !!!";
+                    return OnGet((string)ViewData["K"]);
                 }
                 s.UserName = generate.GenerateDisplayName(row[0].ToString().Trim()) + s.StudentId;
                 s.Image = null;
@@ -98,12 +101,14 @@ namespace StudentAttandance.Pages.Admin
                 }
                 catch (Exception e)
                 {
-                    return OnGet("Date is not a valid format!!!", (string)ViewData["K"]);
+                    ViewData["Message"] = "Date is not a valid format!!!";
+                    return OnGet((string)ViewData["K"]);
                 }
 
                 if (!row[2].ToString().Trim().Equals("0") && !row[2].ToString().Trim().Equals("1"))
                 {
-                    return OnGet("Gender must be 0 or 1 !!!", (string)ViewData["K"]);
+                    ViewData["Message"] = "Gender must be 0 or 1 !!!";
+                    return OnGet((string)ViewData["K"]);
                 }
                 s.Gender = (row[2].ToString().Trim() == "0") ? false : true;
 

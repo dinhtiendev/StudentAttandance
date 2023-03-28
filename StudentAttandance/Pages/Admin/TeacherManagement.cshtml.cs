@@ -27,7 +27,7 @@ namespace StudentAttandance.Pages.Admin
             _teacherRepository = teacherRepository;
         }
 
-        public IActionResult OnGet(string message)
+        public IActionResult OnGet()
         {
             if (HttpContext.Session.GetString("Account") != null)
             {
@@ -35,7 +35,7 @@ namespace StudentAttandance.Pages.Admin
 
                 if (account.RoleId == 1)
                 {
-                    ViewData["Message"] = message;
+                    //ViewData["Message"] = null;
                     ViewData["TeacherList"] = _teacherRepository.GetAllTeachers().ToList();
                     ViewData["TotalTeachers"] = _teacherRepository.GetAllTeachers().ToList().Count();
                     return Page();
@@ -50,7 +50,7 @@ namespace StudentAttandance.Pages.Admin
 
             if (!ModelState.IsValid)
             {
-                return OnGet(null);
+                return OnGet();
             }
             var sheetTemplate = _excelSerivce.GetSheetFromTemplate("TeacherList.xlsx");
             var sheetUpload = _excelSerivce.GetSheetFromUpload(ExcelFile);
@@ -59,7 +59,8 @@ namespace StudentAttandance.Pages.Admin
             var checkHeader = _excelSerivce.CheckHeader(columnsTemplate, columnsUpload);
             if (!checkHeader)
             {
-                return OnGet("The file upload header does not match the template !!!");
+                ViewData["Message"] = "The file upload header does not match the template !!!";
+                return OnGet();
             }
 
             List<Teacher> teachers = _teacherRepository.GetTeachers();
@@ -72,7 +73,8 @@ namespace StudentAttandance.Pages.Admin
                 t.FullName = row[0].ToString().Trim();
                 if (string.IsNullOrWhiteSpace(t.FullName))
                 {
-                    return OnGet("FullName is required !!!");
+                    ViewData["Message"] = "FullName is required !!!";
+                    return OnGet();
                 }
                 t.TeacherId = generate.GenerateTeacherCode(teachers, listT, row[0].ToString().Trim());
                 t.UserName = t.TeacherId;
@@ -83,11 +85,13 @@ namespace StudentAttandance.Pages.Admin
                 }
                 catch (Exception e)
                 {
-                    return OnGet("Date is not a valid format!!!");
+                    ViewData["Message"] = "Date is not a valid format!!!";
+                    return OnGet();
                 }
                 if (!row[2].ToString().Trim().Equals("0") && !row[2].ToString().Trim().Equals("1"))
                 {
-                    return OnGet("Gender must be 0 or 1 !!!");
+                    ViewData["Message"] = "Gender must be 0 or 1 !!!";
+                    return OnGet();
                 }
                 t.Gender = (row[2].ToString().Trim() == "0") ? false : true;
                 listT.Add(t);
